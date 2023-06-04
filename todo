@@ -1,0 +1,10 @@
+- Change stylesheet
+
+Ensure that changes for App.java do NOT get staged.
+
+- Function for parsing the CSV files into SQL, initializes database
+>	- Update .gitignore alongside this to ignore resultant output
+
+- Modify the common elements.
+
+- Wrapper class for SQL.

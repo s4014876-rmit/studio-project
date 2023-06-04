@@ -1,6 +1,11 @@
 package app;
 
-import java.io.EOFException;
+/*
+ * Still remains to do to finish the CreateTable function, write the ParseAll
+ * Need to replace instances of 'c = (char)finr.read();' with something more pleasant
+ * Overall make logic clearer to understand
+ * 
+ */
 
 // A script specialized to parse the CSV files, and turn them into an SQL database.
 
@@ -11,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-import org.sqlite.SQLiteConfig.Encoding;
 
 public class ParseCSV {
 
@@ -28,12 +32,7 @@ public class ParseCSV {
 	//	EOF			Defines the End-Of-File character.
 	static final char			EOF = (char)(-1); 
 
-
-	private static void Init() throws IOException {
-		fout = new FileWriter("database/GenerateDatabase.sql", false);
-	}
-
-	public static void CreateTables() throws IOException {
+	private static void CreateTables() throws IOException {
 		fout.write(
 		"""
 		PRAGMA foreign_keys = ON;
@@ -75,7 +74,7 @@ public class ParseCSV {
 		);
 	}
 
-	private static void GenericParse(String table_name, String csv_file, String column, String encoding) throws IOException{
+	private static void GenericParse(String table_name, String csv_file, String encoding, String column) throws IOException{
 		//	Initialize variables
 		try {
 			fins = new FileInputStream("database/csv/" + csv_file);
@@ -160,17 +159,73 @@ public class ParseCSV {
 	}
 
 	// A modification of GenericParse() which must handle Population.csv
-	private static void PopulationParse() throws IOException {
+	private static void PopulationParse(String table_name, String csv_file, String encoding) throws IOException {
+		//	Initialize variables
+		try {
+			fins = new FileInputStream("database/csv/" + csv_file);
+			finr = new InputStreamReader(fins, encoding);
+			System.out.println("Begun generating SQL for " + csv_file);
+ 		} catch (FileNotFoundException e) {
+			System.out.println("Error: Could not find " + csv_file); 
+		}
 		
+		// Throw away first line
+		c = (char)finr.read();
+		while (c != '\n') {
+			c = (char)finr.read();
+		}
+
+		// Read until EOF
+		c = (char)finr.read();
+		while (c != EOF) {
+			String CountryName = "";
+			while (c != ','){
+				CountryName += c;
+				c = (char)finr.read(); 
+			}
+
+			c = (char)finr.read();
+			String CountryCode = "";
+			while (c != ','){
+				CountryCode += c;
+				c = (char)finr.read(); 
+			}
+
+			int Year = 1960;
+			String Population = "";
+			c = (char)finr.read(); 
+			while (c != '\n' && c != EOF){
+				while (c != ',' && c != '\n'){
+					Population += c;
+					c = (char)finr.read(); 
+				}
+				
+				fout.write("INSERT INTO " + table_name + " VALUES (" + Integer.toString(Year)
+				+ ",'" + CountryName + "','" + CountryCode + "'," + Population.trim() + ");\n");
+
+				Year++;
+				Population = "";
+				if (c == ',')
+					c = (char)finr.read(); 
+			}
+
+			if (c == '\n')
+				c = (char)finr.read();
+		} 
+
+
+		fins.close();
 	}
 
 	public static void ParseAll() throws IOException{
-		Init();
+		fout = new FileWriter("database/GenerateDatabase.sql", false);
+
+		CreateTables();
 
 		// Sample with GlobalYearlTemp.csv to ensure the process is thorough.
-		GenericParse("TableName", "GlobalYearlyTemp.csv", "76543210", "UTF-8");
+		//GenericParse("TableName", "GlobalYearlyTemp.csv", "UTF-8", "76543210");
 
-
+		PopulationParse("Population", "Population.csv", "UTF-8");
 
 
 		fout.close();

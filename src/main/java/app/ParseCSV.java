@@ -8,17 +8,18 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ParseCSV {
 
 	//	c			Character buffer
 	static char					c = 0;
-	//	statement	Buffer for the statement.
-	//static String				statement = "";
 	//	s			Strings buffer.
 	static String				s = "";
-	//	fin			Takes input from various CSV files.
-	static FileInputStream		fin = null;
+	//	fins		Stream of file input
+	static FileInputStream		fins = null;
+	//	finr		Input stream reader, handles UTF-8 code points.
+	static InputStreamReader	finr = null;
 	//	fout		Overwrites resultant data of Java program to an SQL file.
 	static FileWriter			fout = null;
 	//	p			Holds additional keywords for the table currently being generated.
@@ -35,11 +36,11 @@ public class ParseCSV {
 		Boolean is_integer	= false;
 	}
 
-	public static void Init_fout(){
+	public static void Init(){
 		try {
 			fout = new FileWriter("database/GenerateDatabase.sql", false);
 		} catch (Exception e) {
-			System.out.println("ParseCSV.Init_fout() failed.");
+			System.out.println("ParseCSV.Init() failed.");
 		}
 	}
 
@@ -56,22 +57,23 @@ public class ParseCSV {
 		1750,15.909,8.357,25.463,Tirana,Albania,40.99N,19.17E
 		*/
 		try {
-			fin = new FileInputStream("database/csv/" + csv_file);
+			fins = new FileInputStream("database/csv/" + csv_file);
+			finr = new InputStreamReader(fins, "UTF-8");
 			System.out.println("Begun generating SQL for " + csv_file);
  		} catch (FileNotFoundException e) {
 			System.out.println("Error: Could not find " + csv_file); 
 		}
 
 		// Throw away first line
-		c = (char)fin.read();
+		c = (char)finr.read();
 		while (c != '\n') {
-			c = (char)fin.read();
+			c = (char)finr.read();
 		}
 
 		// Read until EOF
-		final char EOF = (char)(-1);
+		final char EOF = (char)(-1); 
 		
-		c = (char)fin.read();
+		c = (char)finr.read();
 		while (c != EOF) {
 			fout.write("INSERT INTO " + table_name + " VALUES ("); 
 
@@ -80,7 +82,7 @@ public class ParseCSV {
 				//Read until COMMA
 				while (c != ',' && c != '\n' && c != EOF) {
 					s += c;
-					c = (char)fin.read();
+					c = (char)finr.read();
 				}
 
 				//If it is a long/lat coordinate, remove final letter
@@ -103,7 +105,7 @@ public class ParseCSV {
 				switch(c){
 					case ',':
 						fout.write(",");
-						c = (char)fin.read();
+						c = (char)finr.read();
 						break;
 					case '\n': case EOF:
 						fout.write(");\n");
@@ -115,15 +117,15 @@ public class ParseCSV {
 
 			}
 
-			c = (char)fin.read();
+			c = (char)finr.read();
 		} 
 
 
-		fin.close();
+		fins.close();
 	}
 
 	public static void ParseAll() throws IOException{
-		Init_fout();
+		Init();
 
 
 		SimpleParse("TableName", "TEST.csv");

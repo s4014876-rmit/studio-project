@@ -9,39 +9,26 @@ import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class ParseCSV {
 
 	//	c			Character buffer
 	static char					c = 0;
-	//	s			Strings buffer.
-	static String				s = "";
+	//	s			Strings buffer and initialization function.
+	static String[]				s;
 	//	fins		Stream of file input
 	static FileInputStream		fins = null;
 	//	finr		Input stream reader, handles UTF-8 code points.
 	static InputStreamReader	finr = null;
 	//	fout		Overwrites resultant data of Java program to an SQL file.
 	static FileWriter			fout = null;
-	//	p			Holds additional keywords for the table currently being generated.
-	static DataEntity			p = null;
+	//	EOF			Defines the End-Of-File character.
+	static final char			EOF = (char)(-1); 
 
-	public class DataEntity {
-		String	type[];
-		String	attributes[];
-	}
 
-	public class value_flags {
-		Boolean is_varchar	= false;
-		Boolean is_float	= false;
-		Boolean is_integer	= false;
-	}
-
-	public static void Init(){
-		try {
-			fout = new FileWriter("database/GenerateDatabase.sql", false);
-		} catch (Exception e) {
-			System.out.println("ParseCSV.Init() failed.");
-		}
+	private static void Init() throws IOException {
+		fout = new FileWriter("database/GenerateDatabase.sql", false);
 	}
 
 	public static void CreateTables() throws IOException {
@@ -81,14 +68,8 @@ public class ParseCSV {
 		);
 	}
 
-	private static void GenericParse(String table_name, String csv_file) throws IOException{
-		//	Open GlobalYearlyLandTempByCity.csv
-		/*	Sample of CSV for reference.
-		Year,AverageTemperature,MinimumTemperature,MaximumTemperature,City,Country,Latitude,Longitude
-		1750,15.909,8.357,25.463,Durrës,Albania,40.99N,19.17E
-		1750,15.909,8.357,25.463,Elbasan,Albania,40.99N,19.17E
-		1750,15.909,8.357,25.463,Tirana,Albania,40.99N,19.17E
-		*/
+	private static void GenericParse(String table_name, String csv_file, String column) throws IOException{
+		//	Initialize variables
 		try {
 			fins = new FileInputStream("database/csv/" + csv_file);
 			finr = new InputStreamReader(fins, "UTF-8");
@@ -96,7 +77,7 @@ public class ParseCSV {
  		} catch (FileNotFoundException e) {
 			System.out.println("Error: Could not find " + csv_file); 
 		}
-
+		
 		// Throw away first line
 		c = (char)finr.read();
 		while (c != '\n') {
@@ -104,61 +85,63 @@ public class ParseCSV {
 		}
 
 		// Read until EOF
-		final char EOF = (char)(-1); 
-		
-		c = (char)finr.read();
+		c = (char)finr.read(); 
 		while (c != EOF) {
 			fout.write("INSERT INTO " + table_name + " VALUES ("); 
 
+			//	Initialize variables.
+			int k = -1;
+			s = new String[10];
+			Arrays.fill(s, "");
+
 			//Read until NEWLINE
 			while (c != '\n' && c != EOF) {
+				k++;
 				//Read until COMMA
 				while (c != ',' && c != '\n' && c != EOF) {
-					s += c;
+					s[k] += c;
 					c = (char)finr.read();
 				}
-
+				
 				//If it is a long/lat coordinate, remove final letter
-				if (s.charAt(s.length() - 4) == '.'){
-					char temp = s.charAt(s.length()-1);
-					switch(temp){
+				if (s[k].charAt(s[k].length() - 4) == '.'){
+					switch(s[k].charAt(s[k].length()-1)){
 						case 'N': case 'E':
-							s = s.substring(0, s.length()-1);
+							s[k] = s[k].substring(0, s[k].length()-1);
 							break;
 						case 'S': case 'W': 
-							s = "-" + s.substring(0, s.length()-1);
+							s[k] = "-" + s[k].substring(0, s[k].length()-1);
 							break;
 						default:
 							break;
 					}
 				}
-				
-				//	Insert value into INSERT INTO statement
-				if (s.length() > 0){
-					fout.write("'" + s + "'");
-					s = "";
-				}
-				else{
-					fout.write("NULL");
-				}
 
-				//	Append extra text for statement.
-				switch(c){
-					case ',':
-						fout.write(",");
-						c = (char)finr.read();
-						break;
-					case '\n': case EOF:
-						fout.write(");\n");
-						break;
-					default:
-						System.out.println("switch(c) picked up an unexpected value.");
-						break;
-				}
+				if (c == ',')
+					c = (char)finr.read();
+			}
+			//	Insert value into INSERT INTO statement
 
+			for(int i = 0; i <= k; i++){
+				int j = Integer.parseInt(String.valueOf(column.charAt(i)));
+
+				try {  
+					Float.parseFloat(s[j]);
+					Integer.parseInt(s[j]);
+					fout.write(s[j]);
+				}
+				catch (NumberFormatException e) {
+					fout.write("'" + s[j] + "'");
+				}
+				if (i != k) fout.write(",");
 			}
 
-			c = (char)finr.read();
+			k = -1;
+
+			fout.write(");\n");
+
+			if (c == '\n')
+				c = (char)finr.read();
 		} 
 
 
@@ -174,7 +157,7 @@ public class ParseCSV {
 		Init();
 
 		// Sample with GlobalYearlTemp.csv to ensure the process is thorough.
-		GenericParse("TableName", "TEST.csv");
+		GenericParse("TableName", "TEST2.csv", "76543210");
 
 
 

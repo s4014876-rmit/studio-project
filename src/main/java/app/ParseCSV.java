@@ -44,11 +44,44 @@ public class ParseCSV {
 		}
 	}
 
-	public static void CreateTables() {
+	public static void CreateTables() throws IOException {
+		fout.write(
+		"""
+		CREATE TABLE Global {
+			Year		int			NOT NULL,
+			AVG			float		,
+			MIN			float		,
+			MAX			float		,
+			LOAVG		float		,
+			LOMIN		float		,
+			LOMAX		float		,
+			PRIMARY KEY	(Year)
+		};
 
+		CREATE TABLE Country {
+			Year		int			NOT NULL,
+			AVG			float		,
+			MIN			float		,
+			MAX			float		,
+			Country		varchar(20)	,
+			PRIMARY KEY	(Year,Country)
+		}
+
+		CREATE TABLE Country {
+			Year		int			NOT NULL,
+			AVG			float		,
+			MIN			float		,
+			MAX			float		,
+			Country		varchar(20)	,
+			PRIMARY KEY	(Year,Country)
+		}
+
+
+		"""
+		);
 	}
 
-	public static void SimpleParse(String table_name, String csv_file) throws IOException{
+	private static void GenericParse(String table_name, String csv_file) throws IOException{
 		//	Open GlobalYearlyLandTempByCity.csv
 		/*	Sample of CSV for reference.
 		Year,AverageTemperature,MinimumTemperature,MaximumTemperature,City,Country,Latitude,Longitude
@@ -86,22 +119,30 @@ public class ParseCSV {
 				}
 
 				//If it is a long/lat coordinate, remove final letter
-				// This section currently causes an error.
-				/*if (s.charAt(s.length() - 4) == '.'){
+				if (s.charAt(s.length() - 4) == '.'){
 					char temp = s.charAt(s.length()-1);
 					switch(temp){
-						case 'N': case 'S': case 'W': case 'E': //Make negative value cases
+						case 'N': case 'E':
 							s = s.substring(0, s.length()-1);
+							break;
+						case 'S': case 'W': 
+							s = "-" + s.substring(0, s.length()-1);
 							break;
 						default:
 							break;
 					}
-				}*/
+				}
 				
-				//Insert value
-				fout.write("'" + s + "'");
-				s = "";
+				//	Insert value into INSERT INTO statement
+				if (s.length() > 0){
+					fout.write("'" + s + "'");
+					s = "";
+				}
+				else{
+					fout.write("NULL");
+				}
 
+				//	Append extra text for statement.
 				switch(c){
 					case ',':
 						fout.write(",");
@@ -124,11 +165,16 @@ public class ParseCSV {
 		fins.close();
 	}
 
+	// A modification of GenericParse() which must handle Population.csv
+	private static void PopulationParse() throws IOException {
+
+	}
+
 	public static void ParseAll() throws IOException{
 		Init();
 
-
-		SimpleParse("TableName", "TEST.csv");
+		// Sample with GlobalYearlTemp.csv to ensure the process is thorough.
+		GenericParse("TableName", "TEST.csv");
 
 
 

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
+import org.sqlite.SQLiteConfig.Encoding;
+
 public class ParseCSV {
 
 	//	c			Character buffer
@@ -19,7 +21,7 @@ public class ParseCSV {
 	static String[]				s;
 	//	fins		Stream of file input
 	static FileInputStream		fins = null;
-	//	finr		Input stream reader, handles UTF-8 code points.
+	//	finr		Input stream reader, handles specific encoding formats.
 	static InputStreamReader	finr = null;
 	//	fout		Overwrites resultant data of Java program to an SQL file.
 	static FileWriter			fout = null;
@@ -34,6 +36,8 @@ public class ParseCSV {
 	public static void CreateTables() throws IOException {
 		fout.write(
 		"""
+		PRAGMA foreign_keys = ON;
+
 		CREATE TABLE Global {
 			Year		int			NOT NULL,
 			AVG			float		,
@@ -42,25 +46,28 @@ public class ParseCSV {
 			LOAVG		float		,
 			LOMIN		float		,
 			LOMAX		float		,
-			PRIMARY KEY	(Year)
+			PRIMARY KEY (Year)
 		};
 
 		CREATE TABLE Country {
 			Year		int			NOT NULL,
+			Country		varchar(20)	,
 			AVG			float		,
 			MIN			float		,
 			MAX			float		,
-			Country		varchar(20)	,
-			PRIMARY KEY	(Year,Country)
+			PRIMARY KEY (Year,Country)
 		}
 
-		CREATE TABLE Country {
+		CREATE TABLE City {
 			Year		int			NOT NULL,
+			Country		varchar(20)	NOT NULL,
+			City		varchar(20)	NOT NULL,
 			AVG			float		,
 			MIN			float		,
 			MAX			float		,
-			Country		varchar(20)	,
-			PRIMARY KEY	(Year,Country)
+			PRIMARY KEY (Year,Country,City),
+			FOREIGN KEY (Year) REFERENCES Country(Year),
+			FOREIGN KEY (Country) REFERENCES Country(Country),
 		}
 
 
@@ -68,11 +75,11 @@ public class ParseCSV {
 		);
 	}
 
-	private static void GenericParse(String table_name, String csv_file, String column) throws IOException{
+	private static void GenericParse(String table_name, String csv_file, String column, String encoding) throws IOException{
 		//	Initialize variables
 		try {
 			fins = new FileInputStream("database/csv/" + csv_file);
-			finr = new InputStreamReader(fins, "UTF-8");
+			finr = new InputStreamReader(fins, encoding);
 			System.out.println("Begun generating SQL for " + csv_file);
  		} catch (FileNotFoundException e) {
 			System.out.println("Error: Could not find " + csv_file); 
@@ -86,7 +93,7 @@ public class ParseCSV {
 
 		// Read until EOF
 		c = (char)finr.read(); 
-		while (c != EOF) {
+		while (c != EOF) { 
 			fout.write("INSERT INTO " + table_name + " VALUES ("); 
 
 			//	Initialize variables.
@@ -104,7 +111,8 @@ public class ParseCSV {
 				}
 				
 				//If it is a long/lat coordinate, remove final letter
-				if (s[k].charAt(s[k].length() - 4) == '.'){
+				try {
+					if (s[k].charAt(s[k].length() - 4) == '.'){
 					switch(s[k].charAt(s[k].length()-1)){
 						case 'N': case 'E':
 							s[k] = s[k].substring(0, s[k].length()-1);
@@ -115,6 +123,9 @@ public class ParseCSV {
 						default:
 							break;
 					}
+					}
+				} catch (Exception e) {
+					System.out.println("Value too small; all good!");
 				}
 
 				if (c == ',')
@@ -150,14 +161,14 @@ public class ParseCSV {
 
 	// A modification of GenericParse() which must handle Population.csv
 	private static void PopulationParse() throws IOException {
-
+		
 	}
 
 	public static void ParseAll() throws IOException{
 		Init();
 
 		// Sample with GlobalYearlTemp.csv to ensure the process is thorough.
-		GenericParse("TableName", "TEST2.csv", "76543210");
+		GenericParse("TableName", "GlobalYearlyTemp.csv", "76543210", "UTF-8");
 
 
 

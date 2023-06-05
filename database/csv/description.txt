@@ -1,0 +1,72 @@
+Description
+Global Climate Change Data from 1750-2013
+Summary
+
+Some say climate change is the biggest threat of our age while others say it’s a myth based on dodgy science. We are turning some of the data over to you so you can form your own view.
+
+Note that the original data was based on daily average temperature observations. 
+This has been greatly reduced by aggregating down to a yearly frequency. 
+This was done by averaging the daily average temperature observations
+In addition the minimum and maximum of the daily average temperature for each year was calculated.
+
+In this dataset, we have include several files:
+
+* Global Land and Ocean-and-Land Temperatures (GlobalYearlyTemp.csv):
+
+  Date: starts in 1750 for average/min/max land temperature and 1850 for average/max/min ocean and land temperatures
+  AverageTemperature: global average land temperature in celsius (average of the daily average temperature for the entire year)
+  MinimumTemperature: global minimum land temperature in celsius (minimum of the daily average temperature for the entire year)
+  MaximumTemperature: global maximum land temperature in celsius (maximum of the daily average temperature for the entire year)
+
+  LandOceanAverageTemperature: global average land and ocean temperature in celsius (average of the daily average temperature for the entire year)
+  LandOceanMinimumTemperature: global minimum land and ocean temperature in celsius (minimum of the daily average temperature for the entire year)
+  LandOceanMaximumTemperature: global maximum land and ocean temperature in celsius (maximum of the daily average temperature for the entire year)
+
+* Other files include:
+
+  Global Average Land Temperature by Country (GlobalYearlyLandTempByCountry.csv)
+  Date: starts in 1750
+  AverageTemperature: global average land temperature in celsius (average of the daily average temperature for the entire year)
+  MinimumTemperature: global minimum land temperature in celsius (minimum of the daily average temperature for the entire year)
+  MaximumTemperature: global maximum land temperature in celsius (maximum of the daily average temperature for the entire year)
+  Country: Name of country that the temperature was observed
+  
+  Global Average Land Temperature by State (GlobalYearlyLandTempByState.csv)
+  Date: starts in 1750
+  AverageTemperature: global average land temperature in celsius (average of the daily average temperature for the entire year)
+  MinimumTemperature: global minimum land temperature in celsius (minimum of the daily average temperature for the entire year)
+  MaximumTemperature: global maximum land temperature in celsius (maximum of the daily average temperature for the entire year)
+  State: Name of state where temperature was observed
+  Country: Name of country that the state is located in  
+  
+  Global Land Temperatures By City (GlobalYearlyLandTempByCity.csv)
+  Date: starts in 1750
+  AverageTemperature: global average land temperature in celsius (average of the daily average temperature for the entire year)
+  MinimumTemperature: global minimum land temperature in celsius (minimum of the daily average temperature for the entire year)
+  MaximumTemperature: global maximum land temperature in celsius (maximum of the daily average temperature for the entire year)
+  City: Name of city where temperature was observed
+  Country: Name of country that the city is located in
+  Latitude: Latitude coordinates of city
+  Longitude: Longitude coordinates of city
+
+Source: Kaggle
+
+https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data
+
+Raw data: Berkeley Earth data page http://berkeleyearth.org/data/ 
+
+
+Yearly country population statistics from 1960-2013
+Summary
+  
+  Population by Country (Population.csv)
+  Country Name: Name of the country
+  Country Code: 3 letter ISO code abbreviation for the country
+  Year: 1960 - 2013
+  
+Source: World Development Indicators 
+
+https://data.worldbank.org/indicator/SP.POP.TOTL
+
+
+

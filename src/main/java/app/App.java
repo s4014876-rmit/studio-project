@@ -19,16 +19,7 @@ public class App {
     public static final String      CSS_DIR         = "css/";
     public static final String      IMAGES_DIR      = "images/";
 
-
     public static void main(String[] args) {
-        try {
-            ParseCSV.ParseAll();
-        } catch (Exception e) {
-            System.out.println("ParseCSV.ParseAll() Failed");
-        }
-    }
-    // ~~~~~~ DISABLED DURING CSV DEBUGGING
-    /*public static void main(String[] args) {
         // Create our HTTP server and listen in port 7000
         Javalin app = Javalin.create(config -> {
             config.registerPlugin(new RouteOverviewPlugin("/help/routes"));
@@ -43,7 +34,7 @@ public class App {
 
         // Configure Web Routes
         configureRoutes(app);
-    }*/
+    }
 
     public static void configureRoutes(Javalin app) {
         // All webpages are listed here as GET pages

@@ -1,12 +1,5 @@
 package app;
 
-/*
- * Still remains to do to finish the CreateTable function, write the ParseAll
- * Need to replace instances of 'c = (char)finr.read();' with something more pleasant
- * Overall make logic clearer to understand
- * 
- */
-
 // A script specialized to parse the CSV files, and turn them into an SQL database.
 
 import java.io.FileInputStream;
@@ -21,6 +14,9 @@ public class ParseCSV {
 
 	//	c			Character buffer
 	static char					c = 0;
+	static private void			c_read() throws IOException{
+		c = (char)finr.read();
+	}
 	//	s			Strings buffer and initialization function.
 	static String[]				s;
 	//	fins		Stream of file input
@@ -38,42 +34,113 @@ public class ParseCSV {
 		PRAGMA foreign_keys = ON;
 
 		CREATE TABLE Global {
-			Year		int			NOT NULL,
-			AVG			float		,
-			MIN			float		,
-			MAX			float		,
-			LOAVG		float		,
-			LOMIN		float		,
-			LOMAX		float		,
-			PRIMARY KEY (Year)
+			Year			int				NOT NULL,
+			AVG				float			,
+			MIN				float			,
+			MAX				float			,
+			LOAVG			float			,
+			LOMIN			float			,
+			LOMAX			float			,
+			PRIMARY KEY 	(Year)
 		};
 
 		CREATE TABLE Country {
-			Year		int			NOT NULL,
-			Country		varchar(20)	,
-			AVG			float		,
-			MIN			float		,
-			MAX			float		,
-			PRIMARY KEY (Year,Country)
-		}
+			Year			int				NOT NULL,
+			Country			varchar(20)		,
+			AVG				float			,
+			MIN				float			,
+			MAX				float			,
+			PRIMARY KEY 	(Year,Country)
+		};
 
 		CREATE TABLE City {
-			Year		int			NOT NULL,
-			Country		varchar(20)	NOT NULL,
-			City		varchar(20)	NOT NULL,
-			AVG			float		,
-			MIN			float		,
-			MAX			float		,
-			PRIMARY KEY (Year,Country,City),
-			FOREIGN KEY (Year) REFERENCES Country(Year),
-			FOREIGN KEY (Country) REFERENCES Country(Country),
-		}
+			Year			int				NOT NULL,
+			Country			varchar(20)		NOT NULL,
+			City			varchar(20)		NOT NULL,
+			AVG				float			,
+			MIN				float			,
+			MAX				float			,
+			PRIMARY KEY 	(Year,Country,City),
+			FOREIGN KEY 	(Year)			REFERENCES Country(Year),
+			FOREIGN KEY 	(Country)		REFERENCES Country(Country)
+		};
 
+		CREATE TABLE State {
+			Year			int				NOT NULL,
+			Country			varchar(20)		NOT NULL,
+			State			varchar(20)		NOT NULL,
+			AVG				float			,
+			MIN				float			,
+			MAX				float			,
+			PRIMARY KEY 	(Year,Country,State),
+			FOREIGN KEY 	(Year)			REFERENCES Country(Year),
+			FOREIGN KEY		(Country)		REFERENCES Country(Country)
+		};
+
+		CREATE TABLE Population {
+			Year			int				NOT NULL,
+			Country			varchar(20)		NOT NULL,
+			CountryCode		varchar(3)
+			Population		int
+			PRIMARY KEY		(Year,Country)
+		};
+
+		CREATE TABLE Students {
+			StudentNum		int				NOT NULL,
+			Name			varchar(20)		,
+			PRIMARY KEY 	(StudentNum)
+		};
+
+		CREATE TABLE Personas {
+			Name			varchar(20)		NOT NULL,
+			ImageURL		varchar(30)		,
+			Text			varchar(1200)	,
+			PRIMARY KEY		(Name)
+		};
 
 		"""
 		);
 	}
 
+	private static void MiscTables() throws IOException {
+		fout.write(
+		"""
+		INSERT INTO Students VALUES
+		('Aleksei Eaves',	4014876);
+
+		INSERT INTO Students VALUES
+		('Shane Knight',	3785357)
+
+		INSERT INTO Personas VALUES
+		('Jane Doe', 'url/to/image.jpg',
+		'So and so'
+		);
+
+		INSERT INTO Personas VALUES
+		('Jane Doe', 'url/to/image.jpg',
+		'So and so'
+		);
+
+		INSERT INTO Personas VALUES
+		('Jane Doe', 'url/to/image.jpg',
+		'So and so'
+		);
+		
+
+
+
+		""");
+	}
+
+	/*	GenericParse()
+
+column is a String of digits which each represent an attribute indexed from zero.
+It specifies which order attributes will be read in. To illustrate how it works here are some examples.
+	01234	Normal order.
+	43210	Reverse order.
+	10234	First two attributes swapped.
+
+	 */
 	private static void GenericParse(String table_name, String csv_file, String encoding, String column) throws IOException{
 		//	Initialize variables
 		try {
@@ -85,14 +152,14 @@ public class ParseCSV {
 		}
 		
 		// Throw away first line
-		c = (char)finr.read();
+		c_read();
 		while (c != '\n') {
-			c = (char)finr.read();
+			c_read();
 		}
 
 		// Read until EOF
-		c = (char)finr.read(); 
-		while (c != EOF) { 
+		c_read(); 
+		while (c != EOF) {
 			fout.write("INSERT INTO " + table_name + " VALUES ("); 
 
 			//	Initialize variables.
@@ -106,8 +173,13 @@ public class ParseCSV {
 				//Read until COMMA
 				while (c != ',' && c != '\n' && c != EOF) {
 					s[k] += c;
-					c = (char)finr.read();
+					if (c == '\'')
+						s[k] += '\'';
+					c_read();
 				}
+
+				// Trim newline if accidentally placed in.
+				s[k] = s[k].trim();
 				
 				//If it is a long/lat coordinate, remove final letter
 				try {
@@ -128,7 +200,7 @@ public class ParseCSV {
 				}
 
 				if (c == ',')
-					c = (char)finr.read();
+					c_read();
 			}
 			//	Insert value into INSERT INTO statement
 
@@ -151,14 +223,14 @@ public class ParseCSV {
 			fout.write(");\n");
 
 			if (c == '\n')
-				c = (char)finr.read();
+				c_read();
 		} 
 
 
 		fins.close();
 	}
 
-	// A modification of GenericParse() which must handle Population.csv
+	// A different parsing method for Population.csv
 	private static void PopulationParse(String table_name, String csv_file, String encoding) throws IOException {
 		//	Initialize variables
 		try {
@@ -170,34 +242,34 @@ public class ParseCSV {
 		}
 		
 		// Throw away first line
-		c = (char)finr.read();
+		c_read();
 		while (c != '\n') {
-			c = (char)finr.read();
+			c_read();
 		}
 
 		// Read until EOF
-		c = (char)finr.read();
+		c_read();
 		while (c != EOF) {
 			String CountryName = "";
 			while (c != ','){
 				CountryName += c;
-				c = (char)finr.read(); 
+				c_read(); 
 			}
 
-			c = (char)finr.read();
+			c_read();
 			String CountryCode = "";
 			while (c != ','){
 				CountryCode += c;
-				c = (char)finr.read(); 
+				c_read(); 
 			}
 
 			int Year = 1960;
 			String Population = "";
-			c = (char)finr.read(); 
+			c_read(); 
 			while (c != '\n' && c != EOF){
 				while (c != ',' && c != '\n'){
 					Population += c;
-					c = (char)finr.read(); 
+					c_read(); 
 				}
 				
 				fout.write("INSERT INTO " + table_name + " VALUES (" + Integer.toString(Year)
@@ -206,11 +278,11 @@ public class ParseCSV {
 				Year++;
 				Population = "";
 				if (c == ',')
-					c = (char)finr.read(); 
+					c_read(); 
 			}
 
 			if (c == '\n')
-				c = (char)finr.read();
+				c_read();
 		} 
 
 
@@ -221,12 +293,12 @@ public class ParseCSV {
 		fout = new FileWriter("database/GenerateDatabase.sql", false);
 
 		CreateTables();
-
-		// Sample with GlobalYearlTemp.csv to ensure the process is thorough.
-		//GenericParse("TableName", "GlobalYearlyTemp.csv", "UTF-8", "76543210");
-
-		PopulationParse("Population", "Population.csv", "UTF-8");
-
+		GenericParse("Global",	"GlobalYearlyTemp.csv",	"UTF-8",	"0123456");
+		GenericParse("Country",	"GlobalYearlyLandTempByCountry.csv",	"UTF-8",	"04123");
+		GenericParse("City",	"GlobalYearlyLandTempByCity.csv",	"UTF-8",	"05467123");
+		GenericParse("State",	"GlobalYearlyLandTempByState.csv",	"UTF-8",	"054123");
+		PopulationParse("Population", "Population.csv",	"UTF-8");
+		MiscTables();
 
 		fout.close();
 		return;

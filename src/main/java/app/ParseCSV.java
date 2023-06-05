@@ -1,6 +1,9 @@
-package app;
+/*	ParseCSV.java
+ * A Java program specialized for parsing the particular CSV files given for this project,
+ * and turns them into an SQL database.
+ */
 
-// A script specialized to parse the CSV files, and turn them into an SQL database.
+package app;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -12,21 +15,23 @@ import java.util.Arrays;
 
 public class ParseCSV {
 
+
+	//	fins		Stream of file input
+	private static FileInputStream		fins = null;
+	//	finr		Input stream reader, handles specific encoding formats.
+	private static InputStreamReader	finr = null;
+	//	fout		Overwrites resultant data of Java program to an SQL file.
+	private static FileWriter			fout = null;
 	//	c			Character buffer
-	static char					c = 0;
-	static private void			c_read() throws IOException{
+	private static char					c = 0;
+	//	c_read()	Reads a character into the character buffer from finr
+	private static void					c_read() throws IOException{
 		c = (char)finr.read();
 	}
 	//	s			Strings buffer and initialization function.
-	static String[]				s;
-	//	fins		Stream of file input
-	static FileInputStream		fins = null;
-	//	finr		Input stream reader, handles specific encoding formats.
-	static InputStreamReader	finr = null;
-	//	fout		Overwrites resultant data of Java program to an SQL file.
-	static FileWriter			fout = null;
+	private static String[]				s;
 	//	EOF			Defines the End-Of-File character.
-	static final char			EOF = (char)(-1); 
+	private static final char			EOF = (char)(-1); 
 
 	private static void CreateTables() throws IOException {
 		fout.write(
@@ -125,27 +130,24 @@ public class ParseCSV {
 		('Jane Doe', 'url/to/image.jpg',
 		'So and so'
 		);
-		
-
-
-
 		""");
 	}
 
 	/*	GenericParse()
+	The typical parsing function for most of the CSV files.
 
-column is a String of digits which each represent an attribute indexed from zero.
-It specifies which order attributes will be read in. To illustrate how it works here are some examples.
-	01234	Normal order.
-	43210	Reverse order.
-	10234	First two attributes swapped.
-
+	The variable 'column' is a String of digits which each represent a table attribute indexed from zero.
+	It specifies the order which attributes will be output.
+	To illustrate how it works here are some examples.
+		01234	Normal order.
+		43210	Reverse order.
+		10234	First two attributes swapped.
 	 */
-	private static void GenericParse(String table_name, String csv_file, String encoding, String column) throws IOException{
+	private static void GenericParse(String table_name, String csv_file, String column) throws IOException{
 		//	Initialize variables
 		try {
 			fins = new FileInputStream("database/csv/" + csv_file);
-			finr = new InputStreamReader(fins, encoding);
+			finr = new InputStreamReader(fins, "UTF-8");
 			System.out.println("Begun generating SQL for " + csv_file);
  		} catch (FileNotFoundException e) {
 			System.out.println("Error: Could not find " + csv_file); 
@@ -167,10 +169,10 @@ It specifies which order attributes will be read in. To illustrate how it works 
 			s = new String[10];
 			Arrays.fill(s, "");
 
-			//Read until NEWLINE
+			//Read until NEWLINE / EOF
 			while (c != '\n' && c != EOF) {
 				k++;
-				//Read until COMMA
+				//Read until COMMA / NEWLINE / EOF
 				while (c != ',' && c != '\n' && c != EOF) {
 					s[k] += c;
 					if (c == '\'')
@@ -196,17 +198,17 @@ It specifies which order attributes will be read in. To illustrate how it works 
 					}
 					}
 				} catch (Exception e) {
-					System.out.println("Value too small; all good!");
 				}
 
 				if (c == ',')
 					c_read();
 			}
-			//	Insert value into INSERT INTO statement
 
+			//	Insert value into INSERT INTO statement
 			for(int i = 0; i <= k; i++){
 				int j = Integer.parseInt(String.valueOf(column.charAt(i)));
 
+				// If neither of the two functions fail, then write normally, else write with apostrophes.
 				try {  
 					Float.parseFloat(s[j]);
 					Integer.parseInt(s[j]);
@@ -231,11 +233,11 @@ It specifies which order attributes will be read in. To illustrate how it works 
 	}
 
 	// A different parsing method for Population.csv
-	private static void PopulationParse(String table_name, String csv_file, String encoding) throws IOException {
+	private static void PopulationParse(String table_name, String csv_file) throws IOException {
 		//	Initialize variables
 		try {
 			fins = new FileInputStream("database/csv/" + csv_file);
-			finr = new InputStreamReader(fins, encoding);
+			finr = new InputStreamReader(fins, "UTF-8");
 			System.out.println("Begun generating SQL for " + csv_file);
  		} catch (FileNotFoundException e) {
 			System.out.println("Error: Could not find " + csv_file); 
@@ -250,12 +252,14 @@ It specifies which order attributes will be read in. To illustrate how it works 
 		// Read until EOF
 		c_read();
 		while (c != EOF) {
+			// Read into CountryName
 			String CountryName = "";
 			while (c != ','){
 				CountryName += c;
 				c_read(); 
 			}
 
+			// Read into CountryCode
 			c_read();
 			String CountryCode = "";
 			while (c != ','){
@@ -263,20 +267,24 @@ It specifies which order attributes will be read in. To illustrate how it works 
 				c_read(); 
 			}
 
+			// Read rest of line
 			int Year = 1960;
 			String Population = "";
 			c_read(); 
 			while (c != '\n' && c != EOF){
+				// Read until COMMA / NEWLINE
 				while (c != ',' && c != '\n'){
 					Population += c;
 					c_read(); 
 				}
 				
+				// Output INSERT INTO statement
 				fout.write("INSERT INTO " + table_name + " VALUES (" + Integer.toString(Year)
 				+ ",'" + CountryName + "','" + CountryCode + "'," + Population.trim() + ");\n");
 
 				Year++;
 				Population = "";
+				
 				if (c == ',')
 					c_read(); 
 			}
@@ -287,20 +295,22 @@ It specifies which order attributes will be read in. To illustrate how it works 
 
 
 		fins.close();
+		System.out.println("Finished SQL for " + csv_file);
 	}
 
 	public static void ParseAll() throws IOException{
 		fout = new FileWriter("database/GenerateDatabase.sql", false);
 
 		CreateTables();
-		GenericParse("Global",	"GlobalYearlyTemp.csv",	"UTF-8",	"0123456");
-		GenericParse("Country",	"GlobalYearlyLandTempByCountry.csv",	"UTF-8",	"04123");
-		GenericParse("City",	"GlobalYearlyLandTempByCity.csv",	"UTF-8",	"05467123");
-		GenericParse("State",	"GlobalYearlyLandTempByState.csv",	"UTF-8",	"054123");
-		PopulationParse("Population", "Population.csv",	"UTF-8");
+
+		GenericParse	("Global",		"GlobalYearlyTemp.csv",					"0123456");
+		GenericParse	("Country",		"GlobalYearlyLandTempByCountry.csv",	"04123");
+		GenericParse	("City",		"GlobalYearlyLandTempByCity.csv",		"05467123");
+		GenericParse	("State",		"GlobalYearlyLandTempByState.csv",		"054123");
+		PopulationParse	("Population",	"Population.csv");
+
 		MiscTables();
 
 		fout.close();
-		return;
 	}
 }

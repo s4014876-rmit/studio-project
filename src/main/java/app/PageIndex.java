@@ -41,43 +41,45 @@ public class PageIndex implements Handler {
             </div>
         """;
         
-         // CREATE World Tab
-        html = html + "<div class='tabs'>";
-            html = html + "<input type='radio' class='tabs__radio' name='regions' id='WorldTab' checked>";
-            html = html + "<label for='WorldTab' class='tabs__label'>World</label>";
-            html = html + "<div class='tabs__content'>";
-                //CONTENT for Tab World
-                html = html + "<h3>World</h3>";
-                html = html + "<p>This is where all the <i>World</i> data will go:)</p>";
-            html = html + "</div>";
+         // CREATE Tabs
+        html = html + """
+        <div class='tabs'>
+            <input type='radio' class='tabs__radio' name='regions' id='WorldTab' checked>
+            <label for='WorldTab' class='tabs__label'>World</label>
+                <div class='tabs__content'>
+                    <!--CONTENT for Tab World-->
+                        <h3>World</h3>
+                        <p>This is where all the <i>World</i> data will go:)</p>
+                </div>
         
-         // CREATE Country Tab
-            html = html + "<input type='radio' class='tabs__radio' name='regions' id='CountryTab'>";
-            html = html + "<label for='CountryTab' class='tabs__label'>Country</label>";
-            html = html + "<div class='tabs__content'>";
-                //CONTENT for Tab CountryTab
-                    html = html + "<h3>Country</h3>";
-                    html = html + "<p>This is where all the <i>Country</i> data will go:)</p>";
-        html = html + "</div>";
+        <!--CREATE Country Tab-->
+            <input type='radio' class='tabs__radio' name='regions' id='CountryTab'>
+            <label for='CountryTab' class='tabs__label'>Country</label>
+                <div class='tabs__content'>
+                    <!--CONTENT for Tab CountryTab-->
+                        <h3>Country</h3>
+                        <p>This is where all the <i>Country</i> data will go:)</p>
+                </div>
         
-        // CREATE State Tab
-            html = html + "<input type='radio' class='tabs__radio' name='regions' id='StateTab'>";
-            html = html + "<label for='StateTab' class='tabs__label'>State</label>";
-                html = html + "<div class='tabs__content'>";
-                //CONTENT for Tab StateTab
-                html = html + "<h3>State</h3>";
-                html = html + "<p>This is where all the <i>State</i> data will go:)</p>";
-            html = html + "</div>";
+        <!--CREATE State Tab-->
+            <input type='radio' class='tabs__radio' name='regions' id='StateTab'>
+            <label for='StateTab' class='tabs__label'>State</label>
+                <div class='tabs__content'>
+                    <!--CONTENT for Tab StateTab-->
+                        <h3>State</h3>
+                        <p>This is where all the <i>State</i> data will go:)</p>
+                </div>
 
-        // CREATE City Tab
-            html = html + "<input type='radio' class='tabs__radio' name='regions' id='CityTab'>";
-            html = html + "<label for='CityTab' class='tabs__label'>City</label>";
-            html = html + "<div class='tabs__content'>";
-            //CONTENT for Tab CityTab
-                html = html + "<h3>City</h3>";
-                html = html + "<p>This is where all the <i>City</i> data will go:)</p>";
-
-        html = html + "</div>";
+        <!--CREATE City Tab-->
+            <input type='radio' class='tabs__radio' name='regions' id='CityTab'>
+            <label for='CityTab' class='tabs__label'>City</label>
+                <div class='tabs__content'>
+                    <!--CONTENT for Tab CityTab-->
+                        <h3>City</h3>
+                        <p>This is where all the <i>City</i> data will go:)</p>
+                </div>
+            </div>
+        """;
 
         html += CommonElements.Footer();
         html += CommonElements.DocumentEnd();

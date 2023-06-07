@@ -86,7 +86,7 @@ public class PageIndex implements Handler {
             <div class='tabs'>
                 """;
                 
-                //CREATE World Tab
+                //World Tab
                 html = html + """
                 <input type='radio' class='tabs__radio' name='regions' id='WorldTab' checked>
                 <label for='WorldTab' class='tabs__label'>World</label>
@@ -117,7 +117,6 @@ public class PageIndex implements Handler {
                                     <option value='2003'>2003</option>
                                 </select>
                             </div>
-                        </form>
                             """;
 
 
@@ -141,7 +140,7 @@ public class PageIndex implements Handler {
                             <p>This is where all the <i>World</i> data will go:)</p>
                     </div>
             
-                <!--CREATE Country Tab-->
+            <!--CREATE Country Tab-->
 
                 <input type='radio' class='tabs__radio' name='regions' id='CountryTab'>
                 <label for='CountryTab' class='tabs__label'>Country</label>
@@ -151,7 +150,7 @@ public class PageIndex implements Handler {
                             <p>This is where all the <i>Country</i> data will go:)</p>
                     </div>
             
-                <!--CREATE State Tab-->
+            <!--CREATE State Tab-->
 
                 <input type='radio' class='tabs__radio' name='regions' id='StateTab'>
                 <label for='StateTab' class='tabs__label'>State</label>
@@ -161,7 +160,7 @@ public class PageIndex implements Handler {
                             <p>This is where all the <i>State</i> data will go:)</p>
                     </div>
 
-                <!--CREATE City Tab-->
+            <!--CREATE City Tab-->
 
                 <input type='radio' class='tabs__radio' name='regions' id='CityTab'>
                 <label for='CityTab' class='tabs__label'>City</label>

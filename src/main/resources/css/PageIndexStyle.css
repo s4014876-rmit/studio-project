@@ -1,0 +1,31 @@
+.Max_Container{
+    display: flex;
+    margin-bottom: 15%;
+}
+
+
+.Tabs_Container{
+    position: static;
+    flex: 6;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    align-self: flex-start;
+}
+
+.Disp_Container{
+    position: static;
+    flex: 3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    align-self: flex-start;
+    
+}
+
+.World_Image{
+    text-align: center;
+    padding: 20px;
+}

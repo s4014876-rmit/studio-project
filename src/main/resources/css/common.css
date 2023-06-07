@@ -61,14 +61,19 @@ img.top-image {
  .footer {
    background-color: #cccccc;
    padding: 10px;
-   position:absolute;
+      position:fixed;
    left: 0;
    bottom: 0;
    width: 100%;
    height: 70px;
  }
+ 
+ 
+ /*
+   style for tabs 
+ */
 
- /* Style for tabs */
+ /*tabcontainer*/
  .tabs {
    display: flex;
    flex-wrap: wrap;
@@ -77,10 +82,11 @@ img.top-image {
  }
 
  .tabs__label{
-   padding: 10px 16px;
+   padding: 0px 5px;
    cursor: pointer;
  }
-
+ 
+ /*button*/
  .tabs__radio{
    display: none;
  }
@@ -93,7 +99,8 @@ img.top-image {
    font-size: 0.9em;
    display: none;
  }
-
+ 
+ /* function and selection */
  .tabs__radio:checked + .tabs__label {
    font-weight: bold;
    color: #009578;

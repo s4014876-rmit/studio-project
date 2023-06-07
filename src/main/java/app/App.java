@@ -1,5 +1,7 @@
 package app;
 
+import java.io.File;
+
 import io.javalin.Javalin;
 import io.javalin.core.util.RouteOverviewPlugin;
 
@@ -20,6 +22,18 @@ public class App {
     public static final String      IMAGES_DIR      = "images/";
 
     public static void main(String[] args) {
+        try { //Maybe prior to this setup a page at the root of the website which indicates that
+            // the database is being generated.
+            if (new File("database/climate.db").exists() == false ) {
+                if (new File("database/GenerateDatabase.sql").exists() == false ) {
+                    Database.ParseDatabase();
+                }
+                JDBCConnection.GenerateDatabase();
+            }
+        } catch (Exception e) {
+            System.out.println("Testing existence of database/climate.db failed");
+        }
+
         // Create our HTTP server and listen in port 7000
         Javalin app = Javalin.create(config -> {
             config.registerPlugin(new RouteOverviewPlugin("/help/routes"));

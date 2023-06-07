@@ -1,10 +1,10 @@
 package app;
 
-import java.util.ArrayList;
-
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -18,8 +18,7 @@ import java.sql.Statement;
 public class JDBCConnection {
 
     // Name of database file (contained in database folder)
-    public static final String DATABASE = "jdbc:sqlite:database/ctg.db";
-    // public static final String DATABASE = "jdbc:sqlite:database/climate.db";
+    public static final String DATABASE = "jdbc:sqlite:database/climate.db";
 
     /**
      * This creates a JDBC Object so we can keep talking to the database
@@ -28,65 +27,37 @@ public class JDBCConnection {
         System.out.println("Created JDBC Connection Object");
     }
 
-    /**
-     * Get all of the LGAs in the database.
-     * @return
-     *    Returns an ArrayList of LGA objects
-     */
-    public ArrayList<LGA> getLGAs2016() {
-        // Create the ArrayList of LGA objects to return
-        ArrayList<LGA> lgas = new ArrayList<LGA>();
+    public static void GenerateDatabase() throws FileNotFoundException {
+        File sql_file = new File("database/GenerateDatabase.sql");
 
-        // Setup the variable for the JDBC connection
-        Connection connection = null;
-
-        try {
-            // Connect to JDBC data base
-            connection = DriverManager.getConnection(DATABASE);
-
-            // Prepare a new SQL Query & Set a timeout
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);
-
-            // The Query
-            String query = "SELECT * FROM LGA WHERE year='2016'";
-            
-            // Get Result
-            ResultSet results = statement.executeQuery(query);
-
-            // Process all of the results
-            while (results.next()) {
-                // Lookup the columns we need
-                int code     = results.getInt("code");
-                String name  = results.getString("name");
-
-                // Create a LGA Object
-                LGA lga = new LGA(code, name, 2016);
-
-                // Add the lga object to the array
-                lgas.add(lga);
-            }
-
-            // Close the statement because we are done with it
-            statement.close();
+        //  Connect to database
+        Connection con = null;
+        Statement sql_statement = null;
+		try {
+            con = DriverManager.getConnection(DATABASE);
+            sql_statement = con.createStatement();
+            sql_statement.setQueryTimeout(500);
         } catch (SQLException e) {
-            // If there is an error, lets just pring the error
-            System.err.println(e.getMessage());
-        } finally {
-            // Safety code to cleanup
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                // connection close failed.
-                System.err.println(e.getMessage());
-            }
+            System.out.println("Could not connect to database in RunScript()");
         }
 
-        // Finally we return all of the lga
-        return lgas;
+        //  Read in line and execute it.
+        Scanner sql_scanner = new Scanner(sql_file);
+        String s = "";
+        while (sql_scanner.hasNextLine()) {
+
+            s = sql_scanner.nextLine();
+
+            try {
+                sql_statement.execute(s);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            s = "";
+        }
+
+        sql_scanner.close();
     }
 
-    // TODO: Add your required methods here
 }

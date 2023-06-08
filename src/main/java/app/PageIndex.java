@@ -46,6 +46,8 @@ public class PageIndex implements Handler {
         <link rel='stylesheet' type='text/css' href='PageIndexStyle.css'>
         """;
 
+        //TODO make form param for which tab you are on for resubs to not revert to "world"
+
     //Max container - overall container
     html = html + """
     <div class='Max_Container'>
@@ -100,7 +102,6 @@ public class PageIndex implements Handler {
                                 <label for='WorldYear_drop'>World: Select a year(Dropdown):</label>
                                 <select id='WorldYear_drop' name='WorldYear_drop'>
                                 """;
-                                    //create menu to select year
                                     //TODO work out which type of diplay (drop down/scroll/spin a wheel)
 
                                     //JDBCConnection jdbc = new JDBCConnection();
@@ -117,11 +118,13 @@ public class PageIndex implements Handler {
                                     <option value='2003'>2003</option>
                                 </select>
                             </div>
+                            <button type 'submit' class'btn'>Get year data:)</button>
                         </form>
                             """;
-
-
-
+                        
+                        //form param for year selection
+                        String WorldYear_drop = context.formParam("WorldYear_drop");
+                        if (WorldYear_drop == null){
                             html = html + """                                
                             <div class='World_Graph_Container'>
                                 <div class='WorldAvgTempGraph'>
@@ -133,26 +136,142 @@ public class PageIndex implements Handler {
                                 <div class='WorldPopulationGraph'>
                                     <h4>A graph I guess?</h1>
                                 </div>
+                                </div>
+                                        <br></br>
+                                        <p>AvgTemp:XX.X*</p>
+                                        <p>LandOCeanAvg:XX.X*</p>
+                                        <p>Population:XXXXXXX
+                                </div>
+                            """;
+                        }
+                        else {
+                            html = html + """                                
+                            <div class='World_Graph_Container'>
+                                <div class='WorldAvgTempGraph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                <div class='WorldOceanLandTempGraph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                <div class='WorldPopulationGraph'>
+                                    <h4>A graph I guess?</h1>
+                                </div>
+                                </div>
+                                        <br></br>
+                                        """;
+                                        html = html + "<p>AvgTemp:" + getAvgTemp_World(WorldYear_drop) + " degrees</p>";
+                                        html = html + "<p>LandOcreanAvg:" + getLandOceanAvg_World(WorldYear_drop) + " degrees</p>";
+                                        html = html + "<p>Population:" + getPopulation_World(WorldYear_drop) + " degrees";
+                                    
+                                    html = html + """
+                                    <p>This is where all the <i>World</i> data will go:)</p>
                             </div>
-                                <br></br>
-                                <p>AvgTemp:XX.X*</p>
-                                <p>LandOCeanAvg:XX.X*</p>
-                                <p>Population:XXXXXXX
-                            <p>This is where all the <i>World</i> data will go:)</p>
-                    </div>
-            
-                <!--CREATE Country Tab-->
-
+                            """;
+                        }
+                        
+                    
+                //CREATE Country Tab
+                html = html + """
                 <input type='radio' class='tabs__radio' name='regions' id='CountryTab'>
                 <label for='CountryTab' class='tabs__label'>Country</label>
                     <div class='tabs__content'>
-                        <!--CONTENT for Tab CountryTab-->
-                            <h3>Country</h3>
-                            <p>This is where all the <i>Country</i> data will go:)</p>
-                    </div>
-            
-                <!--CREATE State Tab-->
+                        """;
+                        // Content for Country Tab
+                        html = html + """
+                        <h3>Country</h3>
+                        <form action='/' method='post'>
+                            <div class='form-group'>
+                                <label for='Country_drop'>Country: Select a Country(Dropdown):</label>
+                                <select id='Country_drop' name='Country_drop'>
+                                """;
+                                //TODO work out which type of diplay (drop down/scroll/spin a wheel)
 
+                                //JDBCConnection jdbc = new JDBCConnection();
+                                    //ArrayList<String> COUNTRYLIST = jdbc.getCOUNTRYLIST();
+                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
+                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
+                                    // }
+                                    // this is all yoinked from studio workshop 6 and reworked with suitible params
+                                    
+                                    html = html + """
+                                    <option value='Brazil'>Brazil</option>
+                                    <option value='Croatia'>Croatia</option>
+                                    <option value='Pvislavia'>Pvislavia</option>
+                                    <option value='Chicoglio'>Chicoglio</option>
+                                </select>
+                            </div>
+                            """;
+                                    
+                            html = html + """
+                            <div class='form-group'>
+                                <label for='CountryYear_drop'>Year: Select a Year(Dropdown):</label>
+                                <select id='CountryYear_drop' name='CountryYear_drop'>
+                                """;
+                                //JDBCConnection jdbc = new JDBCConnection();
+                                    //ArrayList<String> COUNTRYYEARLIST = jdbc.getCOUNTRYYEARLIST();
+                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
+                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
+                                    // }
+                                    // this is all yoinked from studio workshop 6 and reworked with suitible params
+                                    html = html + """
+                                    <option value='2000'>2000</option>
+                                    <option value='2001'>2001</option>
+                                    <option value='2002'>2002</option>
+                                    <option value='2003'>2003</option>
+                                </select>
+                            </div>
+                            """;
+                            html = html +"""
+                            
+                            <button type 'submit' class'btn'>Get year data:)</button>
+                        </form>
+                            """;
+                                
+                        //form param for country selection
+                        String Country_drop = context.formParam("Country_drop");
+                        String CountryYear_drop = context.formParam("CountryYear_drop");
+                        if (Country_drop == null || CountryYear_drop == null){
+                            html = html + """
+                            <div class='Country_Graph_Container'>
+                                <div class='CountryAvgTemp'>
+                                    <h4>A graph I guess?<h4>
+                                </div>
+                                <div class'CountryPopulation'>
+                                    <h4>A graph I guess?<h4>
+                                </div>
+                                                                
+                                    <br></br>
+                                    <p>AvgTemp:XX.X*</p>
+                                    <p>Population:XXXXXXX</p>
+                                </div>
+                            </div>
+                            """;
+                        }
+                        else {
+                            html = html + """
+                            <div class='Country_Graph_Container'>
+                                <div class='CountryAvgTemp'>
+                                    <h4>A graph I guess?<h4>
+                                </div>
+                                <div class'CountryPopulation'>
+                                    <h4>A graph I guess?<h4>
+                                </div>
+                                </div>
+                                    <br></br>
+                                    """;
+                                    html = html + "<p>AvgTemp:" + getAvgTemp_CountryYear(Country_drop, CountryYear_drop) + " degrees</p>";
+                                    html = html + "<p>Population" + population_CountryYear(Country_drop, CountryYear_drop) + " people</p>";
+
+                                html = html + """
+                                        
+                            <p>This is where all the <i>Country</i> data will go:)</p>
+                        </div>
+                        """;   
+                        }
+                    
+            
+                //Create State Tab
+                html = html + """
                 <input type='radio' class='tabs__radio' name='regions' id='StateTab'>
                 <label for='StateTab' class='tabs__label'>State</label>
                     <div class='tabs__content'>
@@ -182,4 +301,25 @@ public class PageIndex implements Handler {
         context.html(html);
     }
 
+
+    public String getAvgTemp_World(String Year){
+        return Year;
+    }
+
+    public String getLandOceanAvg_World(String Year){
+        return Year;
+    }
+
+    public String getPopulation_World(String Year){
+        return Year;
+    }
+
+    public String getAvgTemp_CountryYear(String Country, String Year){
+        return Year;
+
+    }
+
+    public String population_CountryYear(String Countyr, String Year){
+        return Year;
+    }
 }

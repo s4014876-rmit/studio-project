@@ -43,8 +43,8 @@ public class Database {
 		CREATE TABLE City ( Year int NOT NULL, Country varchar(20) NOT NULL, City varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,City), FOREIGN KEY (Year) REFERENCES Country(Year), FOREIGN KEY (Country) REFERENCES Country(Country) ) ;
 		CREATE TABLE State ( Year int NOT NULL, Country varchar(20) NOT NULL, State varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,State), FOREIGN KEY (Year) REFERENCES Country(Year), FOREIGN KEY (Country) REFERENCES Country(Country) ) ;
 		CREATE TABLE Population ( Year int NOT NULL, Country varchar(20) NOT NULL, CountryCode varchar(3), Population int, PRIMARY KEY (Year,Country) ) ;
-		CREATE TABLE Students ( StudentNum int NOT NULL, Name varchar(20) , PRIMARY KEY (StudentNum) ) ;
-		CREATE TABLE Personas ( Name varchar(20) NOT NULL, ImageURL varchar(30) , Text varchar(1200) , PRIMARY KEY (Name) ) ;
+		CREATE TABLE Student ( StudentNum int NOT NULL, Name varchar(20) , PRIMARY KEY (StudentNum) ) ;
+		CREATE TABLE Persona ( Name varchar(20) NOT NULL, ImageURL varchar(30) , Text varchar(1200) , PRIMARY KEY (Name) ) ;
 		"""
 		);
 	}
@@ -52,11 +52,11 @@ public class Database {
 	private static void MiscTables() throws IOException {
 		fout.write(
 		"""
-		INSERT INTO Students VALUES ('Aleksei Eaves', 4014876);
-		INSERT INTO Students VALUES ('Shane Knight', 3785357);
-		INSERT INTO Personas VALUES ('Jane Doe', 'url/to/image.jpg', 'So and so');
-		INSERT INTO Personas VALUES ('Dane Doe', 'url/to/image.jpg', 'So and so');
-		INSERT INTO Personas VALUES ('Jane Joe', 'url/to/image.jpg', 'So and so');
+		INSERT INTO Student VALUES ('Aleksei Eaves', 4014876);
+		INSERT INTO Student VALUES ('Shane Knight', 3785357);
+		INSERT INTO Persona VALUES ('Jane Doe', 'url/to/image.jpg', 'So and so');
+		INSERT INTO Persona VALUES ('Dane Doe', 'url/to/image.jpg', 'So and so');
+		INSERT INTO Persona VALUES ('Jane Joe', 'url/to/image.jpg', 'So and so');
 		""");
 	}
 

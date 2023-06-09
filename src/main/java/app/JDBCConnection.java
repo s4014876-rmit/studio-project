@@ -32,6 +32,7 @@ public class JDBCConnection {
         }
     }
 
+    //  Takes a String value and executes it as an SQL query, returning its ResultSet which can be used directly in writing pages.
     public ResultSet execute(String s) {
         ResultSet r = null;
         try {
@@ -43,6 +44,7 @@ public class JDBCConnection {
         return r;
     }
 
+    //  Closes a connection.
     public void close() {
         try {
             con.close();

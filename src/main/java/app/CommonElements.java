@@ -2,13 +2,17 @@ package app;
 
 public class CommonElements {
 
-	//	All prepended HTML of a page.
-	public static String DocumentStart(){
+	//	Title is the string variable which gives the document its title.
+	public static String DocumentStart(String Title){
 		return
 		"""
 		<html>
 		<head>
-			<title>Homepage</title>
+			<title>
+		"""
+		+ Title + 
+		"""
+			</title>
 			<link rel='stylesheet' type='text/css' href='common.css' />
 		</head>
 		<body>

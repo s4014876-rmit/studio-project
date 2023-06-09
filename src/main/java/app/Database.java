@@ -38,12 +38,12 @@ public class Database {
 		fout.write(
 		"""
 		PRAGMA foreign_keys = ON ;
-		CREATE TABLE Global ( Year int NOT NULL, AVG float, MIN float , MAX float , LOAVG float , LOMIN float , LOMAX float , PRIMARY KEY (Year) ) ;
-		CREATE TABLE Country ( Year int NOT NULL, Country varchar(20) , AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country) ) ;
-		CREATE TABLE City ( Year int NOT NULL, Country varchar(20) NOT NULL, City varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,City), FOREIGN KEY (Year) REFERENCES Country(Year), FOREIGN KEY (Country) REFERENCES Country(Country) ) ;
-		CREATE TABLE State ( Year int NOT NULL, Country varchar(20) NOT NULL, State varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,State), FOREIGN KEY (Year) REFERENCES Country(Year), FOREIGN KEY (Country) REFERENCES Country(Country) ) ;
-		CREATE TABLE Population ( Year int NOT NULL, Country varchar(20) NOT NULL, CountryCode varchar(3), Population int, PRIMARY KEY (Year,Country) ) ;
-		CREATE TABLE Student ( StudentNum int NOT NULL, Name varchar(20) , PRIMARY KEY (StudentNum) ) ;
+		CREATE TABLE Global ( Year integer NOT NULL, AVG float, MIN float , MAX float , LOAVG float , LOMIN float , LOMAX float , PRIMARY KEY (Year) ) ;
+		CREATE TABLE Country ( Year integer NOT NULL, Country varchar(20) , AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country) ) ;
+		CREATE TABLE City ( Year integer NOT NULL, Country varchar(20) NOT NULL, City varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,City), FOREIGN KEY (Year,Country) REFERENCES Country(Year,Country) ) ;
+		CREATE TABLE State ( Year integer NOT NULL, Country varchar(20) NOT NULL, State varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,State), FOREIGN KEY (Year,Country) REFERENCES Country(Year,Country) ) ;
+		CREATE TABLE Population ( Year integer NOT NULL, Country varchar(20) NOT NULL, CountryCode varchar(3), Population integer, PRIMARY KEY (Year,Country) ) ;
+		CREATE TABLE Student ( Name varchar(20) , StudentNum integer NOT NULL , PRIMARY KEY (StudentNum) ) ;
 		CREATE TABLE Persona ( Name varchar(20) NOT NULL, ImageURL varchar(30) , Text varchar(1200) , PRIMARY KEY (Name) ) ;
 		"""
 		);
@@ -242,6 +242,7 @@ public class Database {
 
 	public static void GenerateDatabase() throws FileNotFoundException {
         File sql_file = new File("database/GenerateDatabase.sql");
+		int lines = 0;
 
         //  Connect to database
         JDBCConnection con = new JDBCConnection();
@@ -249,11 +250,22 @@ public class Database {
         //  Read in line and execute it.
         Scanner sql_scanner = new Scanner(sql_file);
         String s = "";
+
+		System.out.println("Beginning database generation."); 
         while (sql_scanner.hasNextLine()) {
             s = sql_scanner.nextLine();
             con.execute(s);
             s = "";
+			
+			if (lines % 8136 == 0){
+				System.out.print("\n" + (lines / 8136) + "%"); 
+			}
+			if (lines % 400 == 0){
+				System.out.print("."); 
+			}
+			lines++;
         }
+		System.out.println("Finished database generation."); 
 
         sql_scanner.close();
         con.close();

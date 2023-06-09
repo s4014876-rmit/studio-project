@@ -35,6 +35,7 @@ public class PageMission implements Handler {
         }
 
         html += CommonElements.Table("Select * From Student");
+        html += CommonElements.Table("Select * From Persona");
 
         html += CommonElements.Footer();
         html += CommonElements.DocumentEnd();

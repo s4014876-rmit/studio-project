@@ -2,6 +2,7 @@ package app;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -31,12 +32,15 @@ public class JDBCConnection {
         }
     }
 
-    public void execute(String s) {
+    public ResultSet execute(String s) {
+        ResultSet r = null;
         try {
             sql_statement.execute(s);
+            r = sql_statement.getResultSet();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return r;
     }
 
     public void close() {

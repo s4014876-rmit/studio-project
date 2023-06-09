@@ -1,3 +1,0 @@
-Currently the SQL mostly works, except for City/State.
-Their tables are created but do not allow values to be inserted.
-This could be due to something regarding their foreign key definitions as they are the only tables using multiple foreign keys.

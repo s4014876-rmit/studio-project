@@ -29,7 +29,7 @@ public class PageST3A implements Handler {
     public void handle(Context context) throws Exception {
         String html = "";
         
-        html += CommonElements.DocumentStart();
+        html += CommonElements.DocumentStart("3A");
         html += CommonElements.Header();
 
         // Contributions will mostly go here.

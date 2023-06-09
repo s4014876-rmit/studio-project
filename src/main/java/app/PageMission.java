@@ -1,15 +1,8 @@
 package app;
 
-import java.util.ArrayList;
-
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Example Index HTML class using Javalin
@@ -28,16 +21,24 @@ public class PageMission implements Handler {
     @Override
     public void handle(Context context) throws Exception {
         String html = "";
+        JDBCConnection con = new JDBCConnection();
+        ResultSet personas = con.execute("Select * From Personas");
+        ResultSet students = con.execute("Select * From Students");
         
-        html += CommonElements.DocumentStart();
+        html += CommonElements.DocumentStart("Mission Statement");
         html += CommonElements.Header();
 
         // Contributions will mostly go here.
+        html += "Testing SQL return values:";
+        while(students.next()){
+            html += students.getString("StudentNum") + ": " + students.getString("Name") + "\n\n";
+        }
 
         html += CommonElements.Footer();
         html += CommonElements.DocumentEnd();
 
         context.html(html);
+        con.close();
     }
 
 }

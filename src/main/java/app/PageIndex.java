@@ -29,7 +29,7 @@ public class PageIndex implements Handler {
     public void handle(Context context) throws Exception {
         String html = "";
         
-        html += CommonElements.DocumentStart();
+        html += CommonElements.DocumentStart("Homepage");
         html += CommonElements.Header();
 
          // header for the page

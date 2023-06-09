@@ -29,7 +29,7 @@ public class PageST2B implements Handler {
     public void handle(Context context) throws Exception {
         String html = "";
         
-        html += CommonElements.DocumentStart();
+        html += CommonElements.DocumentStart("2B");
         html += CommonElements.Header();
 
         // Contributions will mostly go here.

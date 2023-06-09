@@ -5,12 +5,14 @@
 
 package app;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class Database {
@@ -237,5 +239,25 @@ public class Database {
 
 		fout.close();
 	}
+
+	public static void GenerateDatabase() throws FileNotFoundException {
+        File sql_file = new File("database/GenerateDatabase.sql");
+
+        //  Connect to database
+        JDBCConnection con = new JDBCConnection();
+
+        //  Read in line and execute it.
+        Scanner sql_scanner = new Scanner(sql_file);
+        String s = "";
+        while (sql_scanner.hasNextLine()) {
+            s = sql_scanner.nextLine();
+            con.execute(s);
+            s = "";
+        }
+
+        sql_scanner.close();
+        con.close();
+    }
+
 
 }

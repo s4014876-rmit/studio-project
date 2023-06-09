@@ -28,7 +28,7 @@ public class App {
                 if (new File("database/GenerateDatabase.sql").exists() == false ) {
                     Database.ParseDatabase();
                 }
-                JDBCConnection.GenerateDatabase();
+                Database.GenerateDatabase();
             }
         } catch (Exception e) {
             System.out.println("Testing existence of database/climate.db failed");

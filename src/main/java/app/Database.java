@@ -40,8 +40,8 @@ public class Database {
 		PRAGMA foreign_keys = ON ;
 		CREATE TABLE Global ( Year integer NOT NULL, AVG float, MIN float , MAX float , LOAVG float , LOMIN float , LOMAX float , PRIMARY KEY (Year) ) ;
 		CREATE TABLE Country ( Year integer NOT NULL, Country varchar(20) , AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country) ) ;
-		CREATE TABLE City ( Year integer NOT NULL, Country varchar(20) NOT NULL, City varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,City), FOREIGN KEY (Year,Country) REFERENCES Country(Year,Country) ) ;
-		CREATE TABLE State ( Year integer NOT NULL, Country varchar(20) NOT NULL, State varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,State), FOREIGN KEY (Year,Country) REFERENCES Country(Year,Country) ) ;
+		CREATE TABLE City ( Year integer NOT NULL, Country varchar(20) NOT NULL, City varchar(20) NOT NULL, Latitude float, Longitude float, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,City) ) ;
+		CREATE TABLE State ( Year integer NOT NULL, Country varchar(20) NOT NULL, State varchar(20) NOT NULL, AVG float , MIN float , MAX float , PRIMARY KEY (Year,Country,State) ) ;
 		CREATE TABLE Population ( Year integer NOT NULL, Country varchar(20) NOT NULL, CountryCode varchar(3), Population integer, PRIMARY KEY (Year,Country) ) ;
 		CREATE TABLE Student ( Name varchar(20) , StudentNum integer NOT NULL , PRIMARY KEY (StudentNum) ) ;
 		CREATE TABLE Persona ( Name varchar(20) NOT NULL, ImageURL varchar(30) , Text varchar(1200) , PRIMARY KEY (Name) ) ;
@@ -183,6 +183,8 @@ public class Database {
 			String CountryName = "";
 			while (c != ','){
 				CountryName += c;
+				if (c == '\'')
+					CountryName += '\'';
 				c_read(); 
 			}
 

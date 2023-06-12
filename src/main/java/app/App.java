@@ -20,6 +20,7 @@ public class App {
     public static final int         JAVALIN_PORT    = 7001;
     public static final String      CSS_DIR         = "css/";
     public static final String      IMAGES_DIR      = "images/";
+    public static final String      FONTS_DIR       = "fonts/";
 
     public static void main(String[] args) {
         try { //Maybe prior to this setup a page at the root of the website which indicates that
@@ -37,12 +38,9 @@ public class App {
         // Create our HTTP server and listen in port 7000
         Javalin app = Javalin.create(config -> {
             config.registerPlugin(new RouteOverviewPlugin("/help/routes"));
-            
-            // Uncomment this if you have files in the CSS Directory
             config.addStaticFiles(CSS_DIR);
-
-            // Uncomment this if you have files in the Images Directory
             config.addStaticFiles(IMAGES_DIR);
+            config.addStaticFiles(FONTS_DIR);
         }).start(JAVALIN_PORT);
 
 

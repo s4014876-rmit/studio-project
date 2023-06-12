@@ -96,7 +96,7 @@ public class PageIndex implements Handler {
                         """;
                         //Content for world tab
                         html = html + """
-                        <h3>World: Select a Year</h3>
+                        <h3>World</h3>
                         <form action='/' method='post'>
                             <div class='form-group'>
                                 <label for='WorldYear_drop'>World: Select a year(Dropdown):</label>
@@ -176,7 +176,7 @@ public class PageIndex implements Handler {
                 <label for='CountryTab' class='tabs__label'>Country</label>
                     <div class='tabs__content'>
                         """;
-                        // Content for Country Tab
+                        //Content for Country Tab
                         html = html + """
                         <h3>Country</h3>
                         <form action='/' method='post'>
@@ -221,10 +221,9 @@ public class PageIndex implements Handler {
                                 </select>
                             </div>
                             """;
-                            html = html +"""
-                            
-                            <button type 'submit' class'btn'>Get year data:)</button>
-                        </form>
+                            html = html + """
+                                <button type 'submit' class'btn'>Get year data:)</button>
+                            </form>
                             """;
                                 
                         //form param for country selection
@@ -233,13 +232,15 @@ public class PageIndex implements Handler {
                         if (Country_drop == null || CountryYear_drop == null){
                             html = html + """
                             <div class='Country_Graph_Container'>
-                                <div class='CountryAvgTemp'>
+                                <div class='CountryAvgTemp_Graph'>
                                     <h4>A graph I guess?<h4>
                                 </div>
-                                <div class'CountryPopulation'>
+                                <div class='CountryPopulation_Graph'>
                                     <h4>A graph I guess?<h4>
                                 </div>
-                                                                
+
+                                
+                                <div class='Country_data_wrapper'>
                                     <br></br>
                                     <p>AvgTemp:XX.X*</p>
                                     <p>Population:XXXXXXX</p>
@@ -253,21 +254,25 @@ public class PageIndex implements Handler {
                                 <div class='CountryAvgTemp'>
                                     <h4>A graph I guess?<h4>
                                 </div>
-                                <div class'CountryPopulation'>
+                                <div class='CountryPopulation'>
                                     <h4>A graph I guess?<h4>
                                 </div>
-                                </div>
-                                    <br></br>
-                                    """;
-                                    html = html + "<p>AvgTemp:" + getAvgTemp_CountryYear(Country_drop, CountryYear_drop) + " degrees</p>";
-                                    html = html + "<p>Population" + population_CountryYear(Country_drop, CountryYear_drop) + " people</p>";
+                            </div>
+                                
+                            <div class='Country_data_wrapper'>
+                                <br></br>
+                                """;
+                                html = html + "<p>AvgTemp:" + getAvgTemp_CountryYear(Country_drop, CountryYear_drop) + " degrees</p>";
+                                html = html + "<p>Population" + population_CountryYear(Country_drop, CountryYear_drop) + " people</p>";
 
-                                html = html + """
-                                        
-                            <p>This is where all the <i>Country</i> data will go:)</p>
-                        </div>
+                                html = html + """        
+                                    <p>This is where all the <i>Country</i> data will go:)</p>
+                                </div>
+                            </div>
                         """;   
                         }
+                    //end tab
+                    html = html + "</div>";
                     
             
                 //Create State Tab
@@ -275,24 +280,208 @@ public class PageIndex implements Handler {
                 <input type='radio' class='tabs__radio' name='regions' id='StateTab'>
                 <label for='StateTab' class='tabs__label'>State</label>
                     <div class='tabs__content'>
-                        <!--CONTENT for Tab StateTab-->
-                            <h3>State</h3>
-                            <p>This is where all the <i>State</i> data will go:)</p>
-                    </div>
+                        """;
+                        //Content for State Tab
+                        html = html + """
+                        <h3>State</h3>
+                        <form action='/' method='post'>
+                            <div class='form-group'>
+                                <label for='State_drop'>State: Select a State(Dropdown):</label>
+                                <select id='State_drop' name='State_drop'>
+                                """;
+                                //TODO work out which type of diplay (drop down/scroll/spin a wheel)
 
-                <!--CREATE City Tab-->
+                                //JDBCConnection jdbc = new JDBCConnection();
+                                    //ArrayList<String> COUNTRYLIST = jdbc.getCOUNTRYLIST();
+                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
+                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
+                                    // }
+                                    // this is all yoinked from studio workshop 6 and reworked with suitible params     
+                                    html = html + """
+                                    <option value='Victoria'>Victoria</option>
+                                    <option value='Western Australia'>Western Australia</option>
+                                    <option value='Tasmania'>Tasmania</option>
+                                    <option value='South Australia'>South Australia</option>
+                                </select>
+                            </div>
+                            """;
 
+                            html = html + """
+                            <div class='form-group'>
+                                <label for='StateYear_drop'>Year: Select a Year(Dropdown):</label>
+                                <select id='StateYear_drop' name='StateYear_drop'>
+                                """;
+                                //JDBCConnection jdbc = new JDBCConnection();
+                                    //ArrayList<String> COUNTRYYEARLIST = jdbc.getCOUNTRYYEARLIST();
+                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
+                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
+                                    // }
+                                    // this is all yoinked from studio workshop 6 and reworked with suitible params
+                                    html = html + """
+                                    <option value='2000'>2000</option>
+                                    <option value='2001'>2001</option>
+                                    <option value='2002'>2002</option>
+                                    <option value='2003'>2003</option>
+                                </select>
+                            </div>
+                            """;
+                            html = html + """
+                                <button type 'submit' class'btn'>Get year data:)</button>
+                            </form>
+                            """;
+
+                        //form param for state selection
+                        String State_drop = context.formParam("State_drop");
+                        String StateYear_drop = context.formParam("StateYear_drop");
+                        if (State_drop == null || StateYear_drop == null){
+                            html = html + """
+                            <div class='State_Graph_Container'>
+                                <div class='StateAvgTemp_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                <div class='StatePopulation_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                    
+                                <div class='State_data_wrapper'>
+                                    <br></br>
+                                    <p>AvgTemp:XX.X*</p>                                        
+                                    <p>Population:XXXXXXX</p>
+                                </div>
+                            </div>
+                            """;
+                        }
+                        else{
+                            html = html + """
+                            <div class='State_Graph_Container'>
+                                <div class='StateAvgTemp_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                <div class='StatePopulation_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                            </div>
+                                
+                            <div class='State_data_wrapper'>
+                                <br></br>
+                                """;
+                                html = html + "<p>AvgTemp:" + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
+                                html = html + "<p>Population" + population_StateYear(State_drop, StateYear_drop) + " people</p>";
+                                
+                                html = html + """
+                                    <p>This is where all the <i>State</i> data will go:)</p>
+                            </div>
+                        </div>
+                        """;
+                        }
+                    //end tab
+                    html = html + "</div>";
+                
+                //Create City Tab
+                html = html + """
                 <input type='radio' class='tabs__radio' name='regions' id='CityTab'>
                 <label for='CityTab' class='tabs__label'>City</label>
                     <div class='tabs__content'>
-                        <!--CONTENT for Tab CityTab-->
-                            <h3>City</h3>
-                            <p>This is where all the <i>City</i> data will go:)</p>
+                        """;
+                        //Content for City Tab
+                        html = html + """
+                        <h3>City</h3>
+                        <form action='/' method='post'>
+                            <div class='form-group'>
+                                <label for='City_drop'>City: Select a City(Dropdown):</label>
+                                <select id='City_drop' name='City_drop'>
+                                """;
+                                //TODO work out which type of diplay (drop down/scroll/spin a wheel)
+
+                                //JDBCConnection jdbc = new JDBCConnection();
+                                    //ArrayList<String> COUNTRYLIST = jdbc.getCOUNTRYLIST();
+                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
+                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
+                                    // }
+                                    // this is all yoinked from studio workshop 6 and reworked with suitible params     
+                                    html = html + """
+                                    <option value='Melbourne'>Melbourne</option>
+                                    <option value='Hobart'>Hobart</option>
+                                    <option value='Perth'>Perth</option>
+                                    <option value='Sydney'>Sydney</option>
+                                </select>
+                            </div>
+                            """;
+
+                            html = html + """
+                            <div class='form-group'>
+                                <label for='CityYear_drop'>Year: Select a Year(Dropdown):</label>
+                                <select id='CityYear_drop' name='CityYear_drop'>
+                                """;
+                                //JDBCConnection jdbc = new JDBCConnection();
+                                    //ArrayList<String> COUNTRYYEARLIST = jdbc.getCOUNTRYYEARLIST();
+                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
+                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
+                                    // }
+                                    // this is all yoinked from studio workshop 6 and reworked with suitible params
+                                    html = html + """
+                                    <option value='2000'>2000</option>
+                                    <option value='2001'>2001</option>
+                                    <option value='2002'>2002</option>
+                                    <option value='2003'>2003</option>
+                                </select>
+                            </div>
+                            """;
+                            html = html + """
+                                <button type 'submit' class'btn'>Get year data:)</button>
+                            </form>
+                            """;
+
+                        //form param for state selection
+                        String City_drop = context.formParam("City_drop");
+                        String CityYear_drop = context.formParam("CityYear_drop");
+                        if (City_drop == null || CityYear_drop == null){
+                            html = html + """
+                            <div class='City_Graph_Container'>
+                                <div class='CityAvgTemp_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                <div class='CityPopulation_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+
+                                <div class='City_data_wrapper'>
+                                    <br></br>
+                                    <p>AvgTemp:XX.X*</p>                                        
+                                    <p>Population:XXXXXXX</p>
+                                </div>
+                            </div>
+                            """;
+                        }
+                        else{
+                            html = html + """
+                            <div class='City_Graph_Container'>
+                                <div class='CityAvgTemp_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                                <div class='CityPopulation_Graph'>
+                                    <h4>A graph I guess?</h4>
+                                </div>
+                            </div>
+                                
+                            <div class='City_data_wrapper'>
+                                <br></br>
+                                """;
+                                html = html + "<p>AvgTemp:" + getAvgTemp_CityYear(City_drop, CityYear_drop) + " degrees</p>";
+                                html = html + "<p>Population" + population_CityYear(City_drop, CityYear_drop) + " people</p>";
+                                
+                                html = html + """
+                                    <p>This is where all the <i>City</i> data will go:)</p>
+                            </div>
+                        </div>
+                        """;
+                        }
+                    html = html + """
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+   
     """;
 
         html += CommonElements.Footer();
@@ -319,7 +508,23 @@ public class PageIndex implements Handler {
 
     }
 
-    public String population_CountryYear(String Countyr, String Year){
+    public String population_CountryYear(String Country, String Year){
         return Year;
     }
+
+    public String getAvgTemp_StateYear(String State, String Year){
+        return Year;
+    }
+
+    public String population_StateYear(String State, String Year){
+        return Year;
+    }    
+
+    public String getAvgTemp_CityYear(String City, String Year){
+        return Year;
+    }
+
+    public String population_CityYear(String City, String Year){
+        return Year;
+    }             
 }

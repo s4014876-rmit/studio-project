@@ -42,7 +42,8 @@ public class CommonElements {
 			<a href='page2B.html'>Sub Task 2.B</a>
 			<a href='page3A.html'>Sub Task 3.A</a>
 			<a href='page3B.html'>Sub Task 3.B</a>
-		</div>		
+		</div>
+		<div class='content'>
 		""";
 	}
 
@@ -50,6 +51,7 @@ public class CommonElements {
 	public static String Footer() {
 		return
 		"""
+		</div>
 		<div class='footer'>
 			<p>COSC2803 - Studio Project Starter Code (Apr23)</p>
 		</div>

@@ -34,6 +34,45 @@ public class PageST2A implements Handler {
 
         // Contributions will mostly go here.
 
+        // header for page 
+        html = html + """
+        <div class'header'
+            <h1>Compare</h1>
+        </div
+        """;
+
+        // reference page 2A style sheet 
+
+    //Max container = overall container 
+    html = html + """
+    <div class='Max_Container'
+    """;
+
+        //Tabs and tab content 
+
+        //Tab container
+        html = html + """
+        <div class='Tabs_Container'>
+            <div class='tabs'>
+            """;
+
+            //Create World Tab
+            html = html + """
+            <input type='radio' class='tabs_radio' name='regions' id='WorldTab' checked>
+            <label for='WorldTab' class='tabs_label'>World</label>
+                <div class='tabs_content'>        
+
+
+
+
+
+
+
+                    """;
+
+
+
+
         html += CommonElements.Footer();
         html += CommonElements.DocumentEnd();
 

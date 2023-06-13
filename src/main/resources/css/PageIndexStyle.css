@@ -25,6 +25,7 @@
 
 .Tabs_Container{
     position: static;
+    display: flex;
     flex: 6;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-left: 2%;
@@ -33,31 +34,22 @@
     align-self: flex-start;
 }
 
-.World_Graph_Container{
+.Tab_Content_Graph_Container{
     display: flex;
 }
 
-.WorldAvgTempGraph{
-    flex: 1;
+.Tab_Content_Graph{
+    height:0;
+    width:20%;
+    padding-bottom:20%;
     text-align: center;
+    word-wrap: break-word;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-left: 2%;
     margin-right: 2%;
 }
 
-.WorldOceanLandTempGraph{
-    flex: 1;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    margin-left: 2%;
-    margin-right: 2%;
-
-}
-
-.WorldPopulationGraph{
-    flex: 1;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    margin-left: 2%;
-    margin-right: 2%;
+.Tab_Data_Container{
+    text-align: left;
+    padding: 20px;
 }

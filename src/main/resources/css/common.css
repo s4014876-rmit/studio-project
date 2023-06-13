@@ -81,17 +81,17 @@ img.top-image {
    padding: 25px;
  }
 
- .tabs__label{
+ .tabs_label{
    padding: 0px 5px;
    cursor: pointer;
  }
  
  /*button*/
- .tabs__radio{
+ .tabs_radio{
    display: none;
  }
 
- .tabs__content{
+ .tabs_content{
    order: 1;
    width: 100%;
    border-bottom: 3px solid #dddddd;
@@ -101,12 +101,12 @@ img.top-image {
  }
  
  /* function and selection */
- .tabs__radio:checked + .tabs__label {
+ .tabs_radio:checked + .tabs_label {
    font-weight: bold;
    color: #009578;
    border-bottom: 2px solid #009578;
  }
 
- .tabs__radio:checked + .tabs__label + .tabs__content {
+ .tabs_radio:checked + .tabs_label + .tabs_content {
    display: initial;
  }

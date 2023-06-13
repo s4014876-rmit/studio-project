@@ -1,72 +1,123 @@
-/* External CSS style file */
 
-* {
-   box-sizing: border-box;
+/* A sans-serif font. */
+@font-face {
+  font-family: Adventor;
+  src: url('texgyreadventor-regular.otf');
+}
+
+/* A monospace font. */
+@font-face {
+  font-family: Cursor;
+  src: url('texgyrecursor-regular.otf');
+}
+
+/* A serif font. */
+@font-face {
+  font-family: Schola;
+  src: url('texgyreschola-regular.otf');
 }
 
 body {
-   font-family: Arial;
-   padding: 10px;
-   background: #f1f1f1;
+  margin: 0;
+  background: #f0efe0;
+  font-family:  Schola;
 }
 
 /* Header (div) formatting */
+/* Would like to deprecate, or replace topnav with header, as it is confusing */
 .header {
-   padding: 10px;
-   text-align: center;
-   background-color: #cccccc;
-   color: #000000;
+  padding: 10px;
+  text-align: center;
+  background-color: #cccccc;
+  color: #000000;
 }
 
 .header h1 {
-   font-size: 50px;
-}
-
-
-/* Make the logo have a rounded edge */
-img.top-image {
-   vertical-align: middle;
+  font-size: 50px;
 }
 
 /* CSS Layout from W3Schools: https://www.w3schools.com/css/css_templates.asp */
 /* Style the top navigation bar */
+
 .topnav {
-   overflow: hidden;
-   background-color: #333;
- }
+  z-index: 100;
+  background-color: #cccccc;
+  color: #000000;
+  position:fixed;
+  top: 0;
+  width: 100%;
+  height: 2cm;
+  text-align: center;
+
+  display: grid;
+  grid-template-rows: auto; 
+  grid-template-columns: auto 10vw 10vw 10vw 10vw 15vw;
+  grid-gap: 5px;
+}
+
+.topnav a {
+  float: left;
+  display:inline;
+  color: #000;
+  background-color: inherit;
+  text-align: center;
+  text-decoration: none;
+
+  margin: 0.2cm 0cm;
+  padding: 0.6cm 16px;
+  overflow: hidden;
+  font-family: Adventor;
+
+  border-top    :#fff solid 1px;
+  border-left   :#fff solid 1px;
+  border-bottom :#000 solid 1px;
+  border-right  :#000 solid 1px;
+}
+
+.topnav a:first-child {
+  margin-left: 5vw;
+}
+.topnav a:last-child {
+  margin-right: 5vw;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+
+
+  border-top    :#000 solid 1px;
+  border-left   :#000 solid 1px;
+  border-bottom :#fff solid 1px;
+  border-right  :#fff solid 1px;
+}
+
+.footer {
+  z-index: 100;
+  background-color: #cccccc;
+  position:fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1cm;
+}
+
+.footer p {
+  margin: auto;
+  text-align: center;
+}
+
+.content {
+  z-index: 0;
+  padding: 10px;
+  margin-top:    2cm;
+  margin-bottom: 2cm;
+  margin-left:   10%;
+  margin-right:  10%;
+}
  
- /* Style the topnav links */
- .topnav a {
-   float: left;
-   display: block;
-   color: #f2f2f2;
-   text-align: center;
-   padding: 14px 16px;
-   text-decoration: none;
- }
- 
- /* Change color on hover */
- .topnav a:hover {
-   background-color: #ddd;
-   color: black;
- }
- 
- /* Style the content */
- .content {
-   background-color: #ddd;
-   padding: 10px;
- }
- 
- /* Style the footer */
- .footer {
-   background-color: #cccccc;
-   padding: 10px;
-      position:fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   height: 70px;
- }
+
+
  
  
  /*

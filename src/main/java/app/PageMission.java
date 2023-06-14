@@ -33,7 +33,7 @@ public class PageMission implements Handler {
         .grid-container {
             width:                  80%;
             display:                grid;
-            grid-template-rows:     auto 20vh 20vh;
+            grid-template-rows:     auto 20vh 25vh;
             grid-template-columns:  175px 175px 175px 175px 175px 175px;
             grid-column-gap:        25px;
         }
@@ -46,47 +46,60 @@ public class PageMission implements Handler {
         for(int i = 1; i <= 3; i++) {
             html +=
             """
-            .persona-% {
+            .persona-^ {
                 width:          150px;
                 grid-row:       1 / 2;
                 grid-column:    $ / 7;
                 margin-left: 12px;
             }
 
-            .persona-text-% {
+            .persona-text-^ {
                 display: none;
-                background-color: white;
+                background-color: #3895d3;
                 overflow: scroll;
-                max-height: 40%;
-                padding: 0px;
+                padding: 0px 12pt;
                 grid-area: 2 / 4 / 4 / 7;
+                border: 1px solid black;
             }
 
-            .persona-%:hover + .persona-text-%{
+            .persona-^:hover + .persona-text-^{
                 display: block;
             }
             
-            .persona-text-%:hover{
+            .persona-text-^:hover{
                 display: block;
             }
 
-            .persona-% img {
+            .persona-^ img {
                 max-width : 150px;
-                border: black solid 1px;
+                
+                border-top    :#fff solid 1px;
+                border-left   :#fff solid 1px;
+                border-bottom :#000 solid 1px;
+                border-right  :#000 solid 1px;
             }
 
-            .persona-% h1 {
+            .persona-^:hover img {
+                max-width : 150px;
+                
+                border-top    :#000 solid 1px;
+                border-left   :#000 solid 1px;
+                border-bottom :#fff solid 1px;
+                border-right  :#fff solid 1px;
+            }
+
+            .persona-^ h1 {
                 font-size : 14pt;
                 text-align: center;
             }
 
-            .persona-text-% p {
+            .persona-text-^ p {
                 float: right;
                 text-align: justify;
             }
             
             """
-            .replace('%', (char)String.valueOf(i)  .toCharArray()[0])
+            .replace('^', (char)String.valueOf(i)  .toCharArray()[0])
             .replace('$', (char)String.valueOf(i+3).toCharArray()[0]);
         }
         html += "</style>";

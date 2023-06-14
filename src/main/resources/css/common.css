@@ -17,9 +17,16 @@
   src: url('texgyreschola-regular.otf');
 }
 
+/*
+#072f5f
+#1261a0
+#3895d3
+#58cced
+*/
+
 body {
   margin: 0;
-  background: #f0efe0;
+  background: #58cced;
   font-family:  Schola;
 }
 
@@ -28,7 +35,6 @@ body {
 .header {
   padding: 10px;
   text-align: center;
-  background-color: #cccccc;
   color: #000000;
 }
 
@@ -41,7 +47,7 @@ body {
 
 .topnav {
   z-index: 100;
-  background-color: #cccccc;
+  background-color: #072f5f;
   color: #000000;
   position:fixed;
   top: 0;
@@ -49,9 +55,10 @@ body {
   height: 2cm;
   text-align: center;
 
+  
   display: grid;
   grid-template-rows: auto; 
-  grid-template-columns: auto 10vw 10vw 10vw 10vw 15vw;
+  grid-template-columns: auto 13vw 13vw 13vw 13vw 15vw;
   grid-gap: 5px;
 }
 
@@ -59,7 +66,7 @@ body {
   float: left;
   display:inline;
   color: #000;
-  background-color: inherit;
+  background-color: #1261a0;
   text-align: center;
   text-decoration: none;
 
@@ -82,9 +89,7 @@ body {
 }
 
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
-
+  background-color: #3895d3;
 
   border-top    :#000 solid 1px;
   border-left   :#000 solid 1px;
@@ -94,7 +99,9 @@ body {
 
 .footer {
   z-index: 100;
-  background-color: #cccccc;
+  background-color: #072f5f;
+  font-family: Adventor;
+  color: #fff;
   position:fixed;
   left: 0;
   bottom: 0;
@@ -103,7 +110,7 @@ body {
 }
 
 .footer p {
-  margin: auto;
+  margin-top: 0.3cm;
   text-align: center;
 }
 
@@ -114,6 +121,8 @@ body {
   margin-bottom: 2cm;
   margin-left:   10%;
   margin-right:  10%;
+
+  background-color: inherit;
 }
  
 

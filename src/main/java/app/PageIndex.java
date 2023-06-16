@@ -65,17 +65,19 @@ public class PageIndex implements Handler {
             //Data Ranges Display
             html = html + """
             <div class='Data_Ranges'>
-                <h4>AvgGlobalTemp</h4>
-                <p>|------------------|XXX - XXX</p>
-                
-                <h4>LandOceanAvgTemp</h4>
-                <p>|------------------|XXX - XXX</p>
-                
-                <h4>TotalPopulation</h4>
-                <p>|------------------|XXX - XXX</p>
-                
-                <h4>TotalPopulation</h4>
-                <p>|------------------|XXX - XXX</p>
+                """;
+                //data range display values
+                html = html + "<h4>AvgGlobalTemp</h4>";
+                html = html + "<p> |------------------| <p>" + getDispRange("AVG");
+
+                html = html + "<h4>LandOceanAvgTemp</h4>";
+                html = html + "<p> |------------------| <p>" + getDispRange("LOAVG") + "</p>";
+
+                html = html + "<h4>TotalPopulation</h4>";
+                html = html + "<p> |------------------| " + getDispRange("TotalPopulation") + "</p>";
+
+                html = html + """
+                        
             </div>
         </div>
         """;
@@ -430,6 +432,7 @@ public class PageIndex implements Handler {
                                 <div class='Tab_Content_Graph'>
                                     <h4>CityPopulation</h4>
                                 </div>
+                            </div>
 
                                 <div class='Tab_Data_Container'>
                                     <p>AvgTemp:XX.X*</p>                                        
@@ -472,15 +475,31 @@ public class PageIndex implements Handler {
         html += CommonElements.DocumentEnd();
 
         context.html(html);
-
-
-
-
-
-
-
     }
-   
+
+    public String getDispRange(String rangeType) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "";
+        if (rangeType == "AVG"){
+            query = "Select MIN(Year), MAX(Year) FROM Global;";
+        }
+        else if (rangeType == "LOAVG"){
+            query = "Select MIN(Year), MAX(Year) FROM Global where LOAVG IS NOT NULL;";
+        }
+        else if (rangeType == "TotalPopulation"){
+            query = "Select MIN(Year), MAX(Year) from Population";
+        }
+        ResultSet rangeDB = con.execute(query);
+        String rangeMAX = "does not exist";
+        String rangeMIN = "does not exist";
+        while (rangeDB.next()){
+            rangeMAX = rangeDB.getString("MAX(Year)");
+            rangeMIN = rangeDB.getString("MIN(Year)");
+        }    
+
+        return "<p> " + rangeMIN + " - " + rangeMAX + "</p>";    
+            
+    }
 
     public String getAvgTemp_World(String Year) throws Exception{
         JDBCConnection con = new JDBCConnection();
@@ -493,12 +512,19 @@ public class PageIndex implements Handler {
         return AvgTemp;
     }
 
-    public String getLandOceanAvg_World(String Year) {
-        return Year;
+    public String getLandOceanAvg_World(String Year) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "Select LOAVG from Global where year = " + Year;
+        ResultSet LandOceanAvgDB = con.execute(query);
+        String LandOceanAvg = "doesnt exist";
+        while (LandOceanAvgDB.next()){
+            LandOceanAvg = LandOceanAvgDB.getString("LOAVG");
+        } 
+        return LandOceanAvg;
     }
 
     public String getPopulation_World(String Year) throws Exception{
-    JDBCConnection con = new JDBCConnection();
+        JDBCConnection con = new JDBCConnection();
         String query = "Select SUM(population) AS population from population where year = " + Year;
         ResultSet populationDB = con.execute(query);
         String population = "does not exist";
@@ -508,14 +534,25 @@ public class PageIndex implements Handler {
         return population;
     }
 
-    public String getAvgTemp_CountryYear(String Country, String Year){
-
-        return Year;
-
+    public String getAvgTemp_CountryYear(String Country, String Year) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "Select AVG from Country WHERE Country = \"" + Country + "\" AND year = " + Year + ";";
+        ResultSet AvgTemp_CountryDB = con.execute(query);
+        String AvgTemp_Country = "Does not exist";
+        while (AvgTemp_CountryDB.next()){
+            AvgTemp_Country = AvgTemp_CountryDB.getString("AVG");
+        }
+        return AvgTemp_Country;
     }
 
-    public String population_CountryYear(String Country, String Year){
-
+    public String population_CountryYear(String Country, String Year) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "Select population from population WHERE Country = \"" + Country + "\" AND year = " + Year + ";";
+        ResultSet population_countryDB = con.execute(query);
+        String population_country = "does not exist";
+        while (population_countryDB.next()){
+            population_country = population_countryDB.getString("Population");
+        }
         return Year;
     }
 

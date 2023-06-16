@@ -107,6 +107,11 @@ public class Database {
 					c_read();
 				}
 
+				//Make NULL value if empty
+				if (s[k] == ""){
+					s[k] = "NULL";
+				}
+
 				// Trim newline if accidentally placed in.
 				s[k] = s[k].trim();
 				
@@ -206,7 +211,15 @@ public class Database {
 					Population += c;
 					c_read(); 
 				}
-				
+
+				//Make NULL value if empty
+				if (Population == ""){
+					Population = "NULL";
+				}
+				if (CountryCode == ""){
+					CountryCode = "NULL";
+				}
+
 				// Output INSERT INTO statement
 				fout.write("INSERT INTO " + table_name + " VALUES (" + Integer.toString(Year)
 				+ ",'" + CountryName + "','" + CountryCode + "'," + Population.trim() + ");\n");

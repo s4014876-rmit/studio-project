@@ -107,14 +107,14 @@ public class Database {
 					c_read();
 				}
 
+				// Trim newline if accidentally placed in.
+				s[k] = s[k].trim();
+
 				//Make NULL value if empty
 				if (s[k] == ""){
 					s[k] = "NULL";
 				}
 
-				// Trim newline if accidentally placed in.
-				s[k] = s[k].trim();
-				
 				//If it is a long/lat coordinate, remove final letter
 				try {
 					if (s[k].charAt(s[k].length() - 4) == '.'){
@@ -211,6 +211,10 @@ public class Database {
 					Population += c;
 					c_read(); 
 				}
+
+				// Trim newline if accidentally placed in.
+				Population = Population.trim();
+				CountryCode = CountryCode.trim();
 
 				//Make NULL value if empty
 				if (Population == ""){

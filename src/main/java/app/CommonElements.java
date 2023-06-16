@@ -60,12 +60,19 @@ public class CommonElements {
 
 
 	public static String Table(String query) {
+		if(query == null || query.isEmpty()){
+			return "<div class='table-container'></div>";
+		}
+		
 		String html = "";
 		JDBCConnection con = new JDBCConnection();
 		ResultSet r = con.execute(query);
 
 		int columnsCount = 0;
 		
+
+
+
 		try {
 			columnsCount = r.getMetaData().getColumnCount();
 		} catch (SQLException e) {

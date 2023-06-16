@@ -125,8 +125,19 @@ body {
   background-color: inherit;
 }
  
+/* Table styling */
+table {
+  border: 2px solid;
+  overflow: scroll;
+}
 
+th {
+  border: 1px solid;
+}
 
+td {
+  border: 1px dotted;
+}
  
  
  /*

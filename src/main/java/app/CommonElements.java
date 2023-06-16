@@ -74,7 +74,9 @@ public class CommonElements {
 
 		//The while(true) loops in the try-catch blocks depend on the fact that SQLException occurs if the index passed to ResultSet.getString(int) is out of range.
 
-		html += "<table>";
+		// table-container can be defined by a local stylesheet, to provide block formatting
+		// for tables, which is necessary for some height adjustments.
+		html += "<div class='table-container'><table>";
 		//	Headers of Table
 		html += "<tr>";
 		
@@ -107,7 +109,7 @@ public class CommonElements {
 		} catch (SQLException e) {
 			System.out.println("ResultSet.next() failed in CommonElements.Table()");
 		}
-		html += "</table>";
+		html += "</table></div>";
 
 		return html;
 	}

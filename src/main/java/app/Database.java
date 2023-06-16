@@ -140,11 +140,15 @@ public class Database {
 			for(int i = 0; i <= k; i++){
 				int j = Integer.parseInt(String.valueOf(column.charAt(i)));
 
-				// If neither of the two functions fail, then write normally, else write with apostrophes.
-				try {  
-					Float.parseFloat(s[j]);
-					Integer.parseInt(s[j]);
-					fout.write(s[j]);
+				// If neither of the two functions fail, or it is a NULL value, then write normally, else write with apostrophes.
+				try {
+					if (s[j] == "NULL") {
+						fout.write(s[j]);
+					} else {
+						Float.parseFloat(s[j]);
+						Integer.parseInt(s[j]);
+						fout.write(s[j]);
+					}
 				}
 				catch (NumberFormatException e) {
 					fout.write("'" + s[j] + "'");
@@ -214,14 +218,10 @@ public class Database {
 
 				// Trim newline if accidentally placed in.
 				Population = Population.trim();
-				CountryCode = CountryCode.trim();
 
 				//Make NULL value if empty
 				if (Population == ""){
 					Population = "NULL";
-				}
-				if (CountryCode == ""){
-					CountryCode = "NULL";
 				}
 
 				// Output INSERT INTO statement

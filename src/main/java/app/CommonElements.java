@@ -19,6 +19,7 @@ public class CommonElements {
 			</title>
 			<meta charset="UTF-8">
 			<link rel='stylesheet' type='text/css' href='common.css' />
+			<link rel='stylesheet' type='text/css' href='TabsCommon.css'>
 		</head>
 		<body>
 		""";
@@ -155,7 +156,6 @@ public class CommonElements {
 
 	//Tab container open
 	public static String tabContainer(){
-		 		
 		return """ 
 			<div class='Tabs_Container'>
             <div class='tabs'>

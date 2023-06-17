@@ -42,7 +42,12 @@ public class PageST2A implements Handler {
         </div
         """;
 
-        // reference page 2A style sheet 
+        html = html + """
+        <link rel='stylesheet' type='text/css' href='TabsCommon.css'>
+        """;
+
+        //query for table later
+        String query = "";
 
         //Max container = overall container 
         html = html + """
@@ -57,6 +62,7 @@ public class PageST2A implements Handler {
             html = html + CommonElements.tabLabel("World", "checked");
                 
                 //Content for world tab
+                //dropdown menus
                 html = html + CommonElements.dropdownFormOpen("World", "/page2A.html");
                     html = html + CommonElements.dropDownOptionOpen("WorldYearMin", "YearMin", " -- Select a start Year -- ");
 
@@ -81,54 +87,49 @@ public class PageST2A implements Handler {
                 String WorldYearMin_drop = context.formParam("WorldYearMin_drop");
                 String WorldYearMax_drop = context.formParam("WorldYearMax_drop");
 
-                if(WorldYearMin_drop == null || WorldYearMax == null){
-                    html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>WorldAvgTemp</h4>
-                        </div>
-                        <div class='Tab_Content_Graph'>
-                            <h4>WorldOceanLandTemp</h4>
-                        </div>
-                        <div class='Tab_Content_Graph'>
-                            <h4>WorldPopulation</h1>
-                        </div>
+                html = html + """
+                <div class='Tab_Content_Graph_Container'>
+                    <div class='Tab_Content_Graph'>
+                        <h4>WorldAvgTemp</h4>
                     </div>
-            
+                    <div class='Tab_Content_Graph'>
+                        <h4>WorldOceanLandTemp</h4>
+                    </div>
+                    <div class='Tab_Content_Graph'>
+                        <h4>WorldPopulation</h1>
+                    </div>
+                </div>
+
+                """;
+
+                if(WorldYearMin_drop == null || WorldYearMax == null){
+
+                html = html + """            
                     <div class='Tab_Data_Container'>
                         <p>AvgTemp diff: XX.X*</p>
                         <p>LandOCeanAvg diff: XX.X*</p>
-                        <p>Population diff: XXXXXXX
+                        <p>Population diff: XXXXXXX people</p>
                     </div>
                 """;
                 }
                 else {
                     html = html + """                                
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>WorldAvgTemp</h4>
-                        </div>
-                        <div class='Tab_Content_Graph'>
-                            <h4>WorldOceanLandTemp</h4>
-                        </div>
-                        <div class='Tab_Content_Graph'>
-                            <h4>WorldPopulation</h1>
-                        </div>
-                    </div>
-
                     <div class='Tab_Data_Container'>
                     """;
-                        html = html + "<p>AvgTemp Year: " + WorldYearMin_drop + " = " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + "degrees</p>";
-                        html = html + "<p>AvgTemp Diff: " + getAvgTempDiff(WorldYearMin_drop, WorldYearMax_drop) + " degrees</p>";
+                        html = html + "<p>Year selected: " + WorldYearMin_drop + " - " + WorldYearMax_drop + "</p>";
+                        html = html + "<p>Average temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
+                        html = html + "<p>Average temp difference: " + getAvgTempDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
 
-                        html = html + "<p>LandOceanAvg Year: " + WorldYearMin_drop + " = " + PageIndex.getLandOceanAvg_World(WorldYearMin_drop) + "degrees</p>";
-                        html = html + "<p>LandOcreanAvg: " + getLandOceanAvgDiff_World(WorldYearMin_drop, WorldYearMax_drop) + " degrees</p>";
+                        html = html + "<p>LandOceanAverage temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
+                        html = html + "<p>Average temp difference: " + getLandOceanAvgDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
 
-                        html = html + "<p>Population Year: " + WorldYearMin_drop + " = " + PageIndex.getPopulation_World(WorldYearMin_drop) + "people";
-                        html = html + "<p>Population: " + getPopulationDiff_World(WorldYearMin_drop, WorldYearMax_drop) + " people";
-                            
+                        html = html + "<p>Population Year: " + WorldYearMin_drop + " = " + PageIndex.getPopulation_World(WorldYearMin_drop) + " people";
+                        html = html + "<p>Population Year: " + WorldYearMax_drop + " = " + PageIndex.getPopulation_World(WorldYearMax_drop) + " people";
+                        html = html + "<p>Population change: " + getPopulationDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " people";
+                        
+                        query = "Select * from global Where Year Between " + WorldYearMin_drop + " AND " + WorldYearMax_drop;
+
                         html = html + """
-                        <p>This is where all the <i>World</i> data will go:)</p>
                     </div>
                     """;
                 }
@@ -172,8 +173,7 @@ public class PageST2A implements Handler {
                 String CountryYearMin_drop = context.formParam("CountryYearMin_drop");
                 String CountryYearMax_drop = context.formParam("CountryYearMax_drop");
 
-                if(Country_drop == null|| CountryYearMin_drop == null || CountryYearMax_drop == null){
-                    html = html + """
+                html = html + """
                     <div class='Tab_Content_Graph_Container'>
                         <div class='Tab_Content_Graph'>
                             <h4>CountryAvgTemp<h4>
@@ -182,39 +182,40 @@ public class PageST2A implements Handler {
                             <h4>CountryPopulation<h4>
                         </div>
                     </div>
-
+                    """;
+                            
+                if(Country_drop == null|| CountryYearMin_drop == null || CountryYearMax_drop == null){
+                    html = html + """
                         <div class='Tab_Data_Container'>
                             <p>AvgTemp:XX.X*</p>
                             <p>Population: XXXXXXX</p>
                         </div>
-                    </div>
-                    """;
+                    </div> 
+                """;
                 }
-                else {
-                    html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CountryAvgTemp<h4>
-                        </div>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CountryPopulation<h4>
-                        </div>
-                    </div>
-                    
+
+                else {   
+                html = html + """
                     <div class='Tab_Data_Container'>
                         """;
-                        //html = html + "<p>AvgTemp Year: " + CountryYearMin_drop + " = " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMin_drop) + "degrees</p>";                                
-                        html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_CountryYear(CountryYearMin_drop, CountryYearMax_drop) + " degrees</p>";
+                        html = html + "<p>Country selected: " + Country_drop + "</p>";
+                        html = html + "<p>Year selected: " + CountryYearMin_drop + " - " + CountryYearMax_drop + "</p><br>";
+                        html = html + "<p>Average Temp: " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMin_drop) + " - " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMax_drop) + "</p>";                                
+                        html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_CountryYear(CountryYearMin_drop, CountryYearMax_drop) + " </p><br>";
 
-                        //html = html + "<p>Population Year: " + CountryYearMin_drop + " = " + PageIndex.getAvgTemp_CountryYear(Country_drop,CountryYearMin_drop) + "people</p>";
-                        html = html + "<p>Population Diff: " + populationDiff_CountryYear(CountryYearMin_drop, CountryYearMax_drop) + " people</p>";
+                        html = html + "<p>Population Year: " + CountryYearMin_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMin_drop) + " people";
+                        html = html + "<p>Population Year: " + CountryYearMax_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMax_drop) + " people";
+                        html = html + "<p>Population change: " + getPopulationDiff(Country_drop, WorldYearMin_drop, WorldYearMax_drop) + " people";
+                        
+                        query = "Select * from Country Where Country = '" + Country_drop + "' AND Year Between " + CountryYearMin_drop + " AND " + CountryYearMax_drop;
 
                         html = html + """
-                        <p>This is where all the <i>Country</i> data will go:)</p>
+                            
                     </div>
                 </div>
                 """;
                 }
+                
 
             //Create state tab
             html = html + CommonElements.tabLabel("State", "not checked");
@@ -253,15 +254,17 @@ public class PageST2A implements Handler {
                 String State_drop = context.formParam("State_drop");
                 String StateYearMin_drop = context.formParam("StateYearMin_drop");
                 String StateYearMax_drop = context.formParam("StateYearMax_drop");
-
-                if(State_drop == null|| StateYearMin_drop == null || StateYearMax_drop == null){
-                    html = html + """
+               
+                html = html + """
                     <div class='Tab_Content_Graph_Container'>
                         <div class='Tab_Content_Graph'>
                             <h4>StateAvgTemp<h4>
                         </div>
                     </div>
-
+                    """;
+                
+                if(State_drop == null|| StateYearMin_drop == null || StateYearMax_drop == null){
+                    html = html + """
                         <div class='Tab_Data_Container'>
                             <p>AvgTemp:XX.X*</p>
                         </div>
@@ -269,18 +272,18 @@ public class PageST2A implements Handler {
                     """;
                 }
                 else {
-                    html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>StateAvgTemp<h4>
-                        </div>
-                    </div>
-                    
+                html = html + """
                     <div class='Tab_Data_Container'
                         """;
-                    html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_StateYear(State_drop, StateYearMin_drop, StateYearMax_drop) + " degrees</p>";
-                    html = html + """
-                    <p>This is where all the <i>State</i> data will go:)</p>
+                        html = html + "<p>State selected: " + State_drop + "</p>";
+                        html = html + "<p>Year selected: " + StateYearMin_drop + " - " + StateYearMax_drop + "</p><br>";
+
+                        html = html + "<p>AvgTemp Diff: " + getAvgTempDiff(State_drop, StateYearMin_drop, StateYearMax_drop) + " degrees</p>";
+                        // query for table
+                        query = "Select * from State Where State = '" + State_drop + "' AND Year Between " + StateYearMin_drop + " AND " + StateYearMax_drop;
+                    
+                        html = html + """
+                            
                     </div>
                 </div>
                 """;
@@ -324,43 +327,57 @@ public class PageST2A implements Handler {
                 String City_drop = context.formParam("City_drop");
                 String CityYearMin_drop = context.formParam("CityYearMin_drop");
                 String CityYearMax_drop = context.formParam("CityYearMax_drop");
+                
+                html = html + """
+                <div class='Tab_Content_Graph_Container'>
+                    <div class='Tab_Content_Graph'>
+                        <h4>CityAvgTemp<h4>
+                    </div>
+                </div>
+                """;
 
                 if(City_drop == null|| CityYearMin_drop == null || CityYearMax_drop == null){
                     html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CityAvgTemp<h4>
-                        </div>
-                    </div>
-
-                        <div class='Tab_Data_Container'>
-                            <p>AvgTemp:XX.X*</p>
-                        </div>
-                    </div>
-                    """;
-                }
-                else {
-                    html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CityAvgTemp<h4>
-                        </div>
-                    </div>
                     
-                    <div class='Tab_Data_Container'
-                        """;
-                    html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_CityYear(City_drop, CityYearMin_drop, CityYearMax_drop) + " degrees</p>";
-                    html = html + """
-                    <p>This is where all the <i>City</i> data will go:)</p>
+                    <div class='Tab_Data_Container'>
+                        <p>AvgTemp:XX.X*</p>
                     </div>
                 </div>
                 """;
                 }
+                else {
+                    html = html + """
+                    <div class='Tab_Data_Container'
+                        """;
+                    html = html + "<p>City selected: " + City_drop + "</p>";
+                    html = html + "<p>Year selected: " + CityYearMin_drop + " - " + CityYearMax_drop + "</p><br>";
 
-                //end tab
-                html = html + "</div>";
-            //close tabs
+                    html = html + "<p>AvgTemp Diff: " + getAvgTempDiff(City_drop, CityYearMin_drop, CityYearMax_drop) + " degrees</p>";
+                    
+                    // query for table
+                    query = "Select * from City Where City = '" + City_drop + "' AND Year Between " + CityYearMin_drop + " AND " + CityYearMax_drop;
+                    html = html + """
+                    </div>
+                </div>
+                """;
+                }
+                //close tabs
+                html = html + "</dv>";
+            //close tab container
             html = html + "</div>";
+        html = html + """
+            <div class='table'>
+            """;
+            
+            html = html + CommonElements.Table(query);
+                
+
+            html = html + "</div>";
+     
+
+
+
+
         //close tab conatianer
         html = html + "</div>";
 
@@ -371,14 +388,15 @@ public class PageST2A implements Handler {
 
         context.html(html);
     }
-    public String getAvgTempDiff(String YearMin, String YearMax){
+
+    public String getAvgTempDiff(String region, String YearMin, String YearMax){
         return YearMin;
     }
-    public String getLandOceanAvgDiff_World(String YearMin, String YearMax){
+    public String getLandOceanAvgDiff(String region, String YearMin, String YearMax){
         return YearMin;
     }
 
-    public String getPopulationDiff_World(String YearMin, String YearMax){
+    public String getPopulationDiff(String region, String YearMin, String YearMax){
         return YearMin;
     }
 

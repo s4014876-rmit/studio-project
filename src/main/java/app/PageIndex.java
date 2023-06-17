@@ -43,10 +43,6 @@ public class PageIndex implements Handler {
         </div>
         """;
         
-    
-        html = html + """
-        <link rel='stylesheet' type='text/css' href='PageIndexStyle.css'>
-        """;
 
         //TODO make form param for which tab you are on for resubs to not revert to "world"
 
@@ -103,11 +99,12 @@ public class PageIndex implements Handler {
 
                         html = html + CommonElements.dropDownOptionClose();
                     html = html + CommonElements.dropDownSubmit("View data");
+                    
 
                     //form param for year selection
                     String WorldYear_drop = context.formParam("WorldYear_drop");
-                    if (WorldYear_drop == null){
-                        html = html + """                                
+                    
+                    html = html + """                                
                         <div class='Tab_Content_Graph_Container'>
                             <div class='Tab_Content_Graph'>
                                 <h4>WorldAvgTemp</h4>
@@ -119,29 +116,20 @@ public class PageIndex implements Handler {
                                 <h4>WorldPopulation</h1>
                             </div>
                         </div>
-                        
+                        """;
+
+                    if (WorldYear_drop == null){
+                        html = html + """                                
                         <div class='Tab_Data_Container'>
                             <p>AvgTemp: XX.X*</p>
                             <p>LandOCeanAvg: XX.X*</p>
-                            <p>Population: XXXXXXX
+                            <p>Population: XXXXXXX</p>
                         </div>
                     </div>
                     """;
                     }
                     else {
                         html = html + """                                
-                        <div class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>WorldAvgTemp</h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>WorldOceanLandTemp</h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>WorldPopulation</h1>
-                            </div>
-                        </div>
-
                         <div class='Tab_Data_Container'>
                             """;
                             html = html + "<p>AvgTemp: " + getAvgTemp_World(WorldYear_drop) + " degrees</p>";
@@ -176,12 +164,11 @@ public class PageIndex implements Handler {
                         html = html + CommonElements.dropDownOptionClose();
                     html = html + CommonElements.dropDownSubmit("View data");
 
-                                
                     //form param for country selection
                     String Country_drop = context.formParam("Country_drop");
                     String CountryYear_drop = context.formParam("CountryYear_drop");
-                    if (Country_drop == null || CountryYear_drop == null){
-                        html = html + """
+
+                    html = html + """
                         <div class='Tab_Content_Graph_Container'>
                             <div class='Tab_Content_Graph'>
                                 <h4>CountryAvgTemp<h4>
@@ -190,7 +177,10 @@ public class PageIndex implements Handler {
                                 <h4>CountryPopulation<h4>
                             </div>
                         </div>
+                        """;
 
+                    if (Country_drop == null || CountryYear_drop == null){
+                        html = html + """
                         <div class='Tab_Data_Container'>
                             <p>AvgTemp:XX.X*</p>
                             <p>Population: XXXXXXX</p>
@@ -200,19 +190,10 @@ public class PageIndex implements Handler {
                     }
                     else {
                         html = html + """
-                        <div class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CountryAvgTemp<h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CountryPopulation<h4>
-                            </div>
-                        </div>
-                                
                         <div class='Tab_Data_Container'>
                             """;
                             html = html + "<p>AvgTemp: " + getAvgTemp_CountryYear(Country_drop, CountryYear_drop) + " degrees</p>";
-                            html = html + "<p>Population: " + population_CountryYear(Country_drop, CountryYear_drop) + " people</p>";
+                            html = html + "<p>Population: " + getpopulation_CountryYear(Country_drop, CountryYear_drop) + " people</p>";
 
                             html = html + """        
                                 <p>This is where all the <i>Country</i> data will go:)</p>
@@ -249,48 +230,42 @@ public class PageIndex implements Handler {
                         html = html + CommonElements.dropDownOptionClose();
                     html = html + CommonElements.dropDownSubmit("View data");
 
-                        //form param for state selection
-                        String State_drop = context.formParam("State_drop");
-                        String StateYear_drop = context.formParam("StateYear_drop");
-                        if (State_drop == null || StateYear_drop == null){
-                            html = html + """
-                            <class='Tab_Content_Graph_Container'>
-                                <div class='Tab_Content_Graph'>
-                                    <h4>StateAvgTemp</h4>
-                                </div
-                            </div>
-                                    
-                            <div class='Tab_Data_Container'>
-                                <p>AvgTemp: XX.X*</p>       
-                            </div>
-                        </div>
-                        """;
-                        }
-                        else{
-                            html = html + """
-                            <div class='Tab_Content_Graph_Container'>
-                                <div class='Tab_Content_Graph'>
-                                    <h4>StateAvgTemp</h4>
-                                </div>
-                                <div class='Tab_Content_Graph'>
-                                    <h4>StatePopulation</h4>
-                                </div>
-                            </div>
-                                
-                            <div class='Tab_Data_Container'>
-                                """;
-                                html = html + "<p>AvgTemp: " + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
-                                
-                                html = html + """
-                                    <p>This is where all the <i>State</i> data will go:)</p>
-                            </div>
-                        </div>
-                        """;
-                        }
-                   
+                    
                         
+                    //form param for state selection
+                    String State_drop = context.formParam("State_drop");
+                    String StateYear_drop = context.formParam("StateYear_drop");
+                    html = html + """
+                        <class='Tab_Content_Graph_Container'>
+                            <div class='Tab_Content_Graph'>
+                                <h4>StateAvgTemp</h4>
+                            </div
+                        </div>
+                        """;
 
-                
+                    if (State_drop == null || StateYear_drop == null){
+                        html = html + """
+                                
+                        <div class='Tab_Data_Container'>
+                            <p>AvgTemp: XX.X*</p>       
+                        </div>
+                    </div>
+                    """;
+                    }
+                    else{
+                        html = html + """
+                            
+                        <div class='Tab_Data_Container'>
+                            """;
+                            html = html + "<p>AvgTemp: " + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
+                            
+                            html = html + """
+                                <p>This is where all the <i>State</i> data will go:)</p>
+                        </div>
+                    </div>
+                    """;
+                    }
+                   
             //Create City Tab
             html = html + CommonElements.tabLabel("City", "not checked");
                 //Content for City Tab
@@ -316,16 +291,16 @@ public class PageIndex implements Handler {
                 //form param for city selection
                 String City_drop = context.formParam("City_drop");
                 String CityYear_drop = context.formParam("CityYear_drop");
+                html = html + """
+                    <div class='Tab_Content_Graph_Container'>
+                        <div class='Tab_Content_Graph'>
+                            <h4>CityAvgTemp</h4>
+                        </div>
+                    </div>
+                    """;
+                    
                     if (City_drop == null || CityYear_drop == null){
                         html = html + """
-                        <div class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CityAvgTemp</h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CityPopulation</h4>
-                            </div>
-                        </div>
 
                             <div class='Tab_Data_Container'>
                                 <p>AvgTemp: XX.X*</p>                                        
@@ -335,32 +310,22 @@ public class PageIndex implements Handler {
                             """;
                         }
                     else{
-                        html = html + """
-                        <div class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CityAvgTemp</h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CityPopulation</h4>
-                            </div>
-                        </div>
-                            
+                        html = html + """ 
                         <div class='Tab_Data_Container'>
                             """;
                             html = html + "<p>AvgTemp: " + getAvgTemp_CityYear(City_drop, CityYear_drop) + " degrees</p>";
                             
                             html = html + """
-                                <p>This is where all the <i>City</i> data will go:)</p>
                         </div>
                     </div>
                     """;
                     }
-                //end tab
-                html = html + "</div>";
             //close tabs
             html = html + "</div>";
-        //close tab conatianer
+        //close max conatianer
         html = html + "</div>";
+
+
 
 
         html += CommonElements.Footer();
@@ -420,7 +385,7 @@ public class PageIndex implements Handler {
         return AvgTemp_Country;
     }
 
-    public static String population_CountryYear(String Country, String Year) throws Exception{
+    public static String getpopulation_CountryYear(String Country, String Year) throws Exception{
         String population = "XXXXXXX";
         if(Double.parseDouble(Year) <= Double.parseDouble(CommonElements.getMaxYear("Population", Year)) && Double.parseDouble(Year) >= Double.parseDouble(CommonElements.getMinYear("Population", Year)) ){
             JDBCConnection con = new JDBCConnection();

@@ -323,18 +323,14 @@ public class PageIndex implements Handler {
                         String StateYear_drop = context.formParam("StateYear_drop");
                         if (State_drop == null || StateYear_drop == null){
                             html = html + """
-                            <div class='Tab_Content_Graph_Container'>
+                            < class='Tab_Content_Graph_Container'>
                                 <div class='Tab_Content_Graph'>
                                     <h4>StateAvgTemp</h4>
-                                </div>
-                                <div class='Tab_Content_Graph'>
-                                    <h4>StatePopulation</h4>
-                                </div>
+                                </div
                             </div>
                                     
                             <div class='Tab_Data_Container'>
-                                <p>AvgTemp: XX.X*</p>                                        
-                                <p>Population: XXXXXXX</p>
+                                <p>AvgTemp: XX.X*</p>       
                             </div>
                         </div>
                         """;
@@ -530,7 +526,7 @@ public class PageIndex implements Handler {
         return formatter.format(amount);
     }
 
-    public String getAvgTemp_CountryYear(String Country, String Year) throws Exception{
+    public static String getAvgTemp_CountryYear(String Country, String Year) throws Exception{
         JDBCConnection con = new JDBCConnection();
         String query = "Select AVG from Country WHERE Country = \"" + Country + "\" AND year = " + Year + ";";
         ResultSet AvgTemp_CountryDB = con.execute(query);
@@ -541,7 +537,7 @@ public class PageIndex implements Handler {
         return AvgTemp_Country;
     }
 
-    public String population_CountryYear(String Country, String Year) throws Exception{
+    public static String population_CountryYear(String Country, String Year) throws Exception{
         JDBCConnection con = new JDBCConnection();
         String query = "Select population from population WHERE Country = \"" + Country + "\" AND year = " + Year + ";";
         ResultSet population_countryDB = con.execute(query);

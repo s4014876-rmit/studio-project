@@ -121,4 +121,73 @@ public class CommonElements {
 		return html;
 	}
 
+	//returns the minimum Year of any table value using the "table" title and the type of data
+	public static String getMinYear(String Table, String rangeType) throws Exception{
+		JDBCConnection con = new JDBCConnection();
+		String query = "Select Min(Year) from " + Table + " WHERE " + rangeType + " IS NOT NULL;" ;
+		ResultSet MinYearDB = con.execute(query);
+		String MinYear = "does not exist";
+		while (MinYearDB.next()){
+		 	MinYear = MinYearDB.getString("Min(Year)");
+		}
+		return MinYear;
+	}
+	//returns maximum Year same as above^
+	public static String getMaxYear(String Table, String rangeType) throws Exception{
+		JDBCConnection con = new JDBCConnection();
+		String query = "Select Max(Year) from " + Table + " WHERE " + rangeType + " IS NOT NULL;" ;
+		ResultSet MaxYearDB = con.execute(query);
+		String MaxYear = "does not exist";
+		while (MaxYearDB.next()){
+		 	MaxYear = MaxYearDB.getString("Max(Year)");
+		}
+		return MaxYear;
+	}
+
+
+	//Tab container open
+	public static String tabContainer(){
+		 		
+		return """ 
+			<div class='Tabs_Container'>
+            <div class='tabs'>
+                """;
+	}
+
+	//Create tab label
+	public static String tabLabel(String tabType, String checked){
+		String html = "";
+		if(checked == "checked"){
+			html = "<input type='radio' class='tabs_radio' name='regions' id='" + tabType + "Tab'" + checked + "> <label for='" + tabType + "Tab' class='tabs_label'>" + tabType +"</label><div class='tabs_content'>";
+		}
+		else 
+		{
+			html = "<input type='radio' class='tabs_radio' name='regions' id='" + tabType + "Tab'> <label for='" + tabType + "Tab' class='tabs_label'>" + tabType +"</label><div class='tabs_content'>";
+		}
+		return html;
+			
+	}
+
+	//create dropdownform open (for tabs)
+	public static String dropdownFormOpen(String region, String post){
+		
+		String html = "<h3>" + region + " <h3> <form action'" + post + "' method='post'>";
+        return html;           
+	}
+
+	//dropdown form option open (for tabs)
+	public static String dropDownOptionOpen(String id, String label, String menuName){
+		String html = "<div class='form-group'><label for='" + id + "_drop'>" + label + ":</label><select id='" + id + "_drop'name='" + id + "_drop'><option value='' selected disabled>" + menuName + "</option>";
+ 
+		return html;
+	}
+	//dropdown form option close (for tabs)
+	public static String dropDownOptionClose(){
+		return "</select></div>";
+	}
+	//dropdown button submit (for tabs)
+	public static String dropDownSubmit(String label){
+		return "<button type 'submit' class'btn'>" + label + "</button></form>";
+	}
+	
 }

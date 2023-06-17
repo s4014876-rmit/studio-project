@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 
 /**
  * Example Index HTML class using Javalin
@@ -116,7 +117,7 @@ public class PageIndex implements Handler {
                                 </select>
                             </div>
                             
-                            <button type 'submit' class'btn'>Get year data:)</button>
+                            <button type 'submit' class'btn'>View data</button>
                         </form>
                             """;
                     //form param for year selection
@@ -217,7 +218,7 @@ public class PageIndex implements Handler {
                             </div>
                             """;
                             html = html + """
-                                <button type 'submit' class'btn'>Get year data:)</button>
+                                <button type 'submit' class'btn'>View data</button>
                             </form>
                             """;
                                 
@@ -237,7 +238,7 @@ public class PageIndex implements Handler {
 
                             <div class='Tab_Data_Container'>
                                 <p>AvgTemp:XX.X*</p>
-                                <p>Population:XXXXXXX</p>
+                                <p>Population: XXXXXXX</p>
                             </div>
                         </div>
                         """;
@@ -260,10 +261,10 @@ public class PageIndex implements Handler {
 
                                 html = html + """        
                                     <p>This is where all the <i>Country</i> data will go:)</p>
-                                </div>
                             </div>
-                        """;   
-                        }
+                        </div>
+                    """;   
+                    }
                     
             
                 //Create State Tab
@@ -279,21 +280,18 @@ public class PageIndex implements Handler {
                             <div class='form-group'>
                                 <label for='State_drop'>State: Select a State(Dropdown):</label>
                                 <select id='State_drop' name='State_drop'>
+                                <option value='' selected disabled> -- Select a State -- </option>
                                 """;
                                 //TODO work out which type of diplay (drop down/scroll/spin a wheel)
 
-                                //JDBCConnection jdbc = new JDBCConnection();
-                                    //ArrayList<String> COUNTRYLIST = jdbc.getCOUNTRYLIST();
-                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
-                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
-                                    // }
-                                    // this is all yoinked from studio workshop 6 and reworked with suitible params     
+                                ResultSet StateList = con.execute("Select DISTINCT State from State Order BY State ASC;");
+
+                                while(StateList.next()){
+                                    html = html + "<option value='" + StateList.getString("State") + "'>" + StateList.getString("State") + "</option>";
+
+                                }
                                     html = html + """
-                                    <option value='Victoria'>Victoria</option>
-                                    <option value='Western Australia'>Western Australia</option>
-                                    <option value='Tasmania'>Tasmania</option>
-                                    <option value='South Australia'>South Australia</option>
-                                </select>
+                                </select
                             </div>
                             """;
 
@@ -301,23 +299,22 @@ public class PageIndex implements Handler {
                             <div class='form-group'>
                                 <label for='StateYear_drop'>Year: Select a Year(Dropdown):</label>
                                 <select id='StateYear_drop' name='StateYear_drop'>
+                                <option value='' selected disabled> -- Select a Year -- </option>
                                 """;
-                                //JDBCConnection jdbc = new JDBCConnection();
-                                    //ArrayList<String> COUNTRYYEARLIST = jdbc.getCOUNTRYYEARLIST();
-                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
-                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
-                                    // }
-                                    // this is all yoinked from studio workshop 6 and reworked with suitible params
-                                    html = html + """
-                                    <option value='2000'>2000</option>
-                                    <option value='2001'>2001</option>
-                                    <option value='2002'>2002</option>
-                                    <option value='2003'>2003</option>
+                                
+                                ResultSet StateYearList = con.execute("Select DISTINCT Year from State Order BY Year DESC;");
+
+                                while(StateYearList.next()){
+                                    html = html + "<option value='" + StateYearList.getString("Year") + "'>" + StateYearList.getString("Year") + "</option>";
+                                }
+                                
+                                html = html + """
                                 </select>
                             </div>
                             """;
+                    
                             html = html + """
-                                <button type 'submit' class'btn'>Get year data:)</button>
+                                <button type 'submit' class'btn'>View data</button>
                             </form>
                             """;
 
@@ -336,8 +333,8 @@ public class PageIndex implements Handler {
                             </div>
                                     
                             <div class='Tab_Data_Container'>
-                                <p>AvgTemp:XX.X*</p>                                        
-                                <p>Population:XXXXXXX</p>
+                                <p>AvgTemp: XX.X*</p>                                        
+                                <p>Population: XXXXXXX</p>
                             </div>
                         </div>
                         """;
@@ -355,8 +352,7 @@ public class PageIndex implements Handler {
                                 
                             <div class='Tab_Data_Container'>
                                 """;
-                                html = html + "<p>AvgTemp:" + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
-                                html = html + "<p>Population" + population_StateYear(State_drop, StateYear_drop) + " people</p>";
+                                html = html + "<p>AvgTemp: " + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
                                 
                                 html = html + """
                                     <p>This is where all the <i>State</i> data will go:)</p>
@@ -364,6 +360,10 @@ public class PageIndex implements Handler {
                         </div>
                         """;
                         }
+                    //end tab
+                    html = html + "</div>";
+                        
+
                 
                 //Create City Tab
                 html = html + """
@@ -378,21 +378,18 @@ public class PageIndex implements Handler {
                             <div class='form-group'>
                                 <label for='City_drop'>City: Select a City(Dropdown):</label>
                                 <select id='City_drop' name='City_drop'>
+                                <option value='' selected disabled> -- Select a City -- </option>
                                 """;
                                 //TODO work out which type of diplay (drop down/scroll/spin a wheel)
 
-                                //JDBCConnection jdbc = new JDBCConnection();
-                                    //ArrayList<String> COUNTRYLIST = jdbc.getCOUNTRYLIST();
-                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
-                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
-                                    // }
-                                    // this is all yoinked from studio workshop 6 and reworked with suitible params     
+                                ResultSet CityList = con.execute("Select DISTINCT City from City Order BY City ASC;");
+
+                                while(CityList.next()){
+                                    html = html + "<option value='" + CityList.getString("City") + "'>" + CityList.getString("City") + "</option>";
+
+                                }
                                     html = html + """
-                                    <option value='Melbourne'>Melbourne</option>
-                                    <option value='Hobart'>Hobart</option>
-                                    <option value='Perth'>Perth</option>
-                                    <option value='Sydney'>Sydney</option>
-                                </select>
+                                </select
                             </div>
                             """;
 
@@ -400,27 +397,24 @@ public class PageIndex implements Handler {
                             <div class='form-group'>
                                 <label for='CityYear_drop'>Year: Select a Year(Dropdown):</label>
                                 <select id='CityYear_drop' name='CityYear_drop'>
+                                <option value='' selected disabled> -- Select a Year -- </option>
                                 """;
-                                //JDBCConnection jdbc = new JDBCConnection();
-                                    //ArrayList<String> COUNTRYYEARLIST = jdbc.getCOUNTRYYEARLIST();
-                                    // for (int i = 0; i <select COUNTRYLIST.size(); i++){
-                                    //     html = html + "         <option>" + COUNTRYLIST.get(i) + "</option>";
-                                    // }
-                                    // this is all yoinked from studio workshop 6 and reworked with suitible params
-                                    html = html + """
-                                    <option value='2000'>2000</option>
-                                    <option value='2001'>2001</option>
-                                    <option value='2002'>2002</option>
-                                    <option value='2003'>2003</option>
+                                ResultSet CityYearList = con.execute("Select DISTINCT Year from City Order BY Year DESC;");
+
+                                while(CityYearList.next()){
+                                    html = html + "<option value='" + CityYearList.getString("Year") + "'>" + CityYearList.getString("Year") + "</option>";
+                                }
+                                
+                                html = html + """
                                 </select>
                             </div>
                             """;
                             html = html + """
-                                <button type 'submit' class'btn'>Get year data:)</button>
+                                <button type 'submit' class'btn'>View data</button>
                             </form>
                             """;
 
-                        //form param for state selection
+                        //form param for city selection
                         String City_drop = context.formParam("City_drop");
                         String CityYear_drop = context.formParam("CityYear_drop");
                         if (City_drop == null || CityYear_drop == null){
@@ -435,8 +429,8 @@ public class PageIndex implements Handler {
                             </div>
 
                                 <div class='Tab_Data_Container'>
-                                    <p>AvgTemp:XX.X*</p>                                        
-                                    <p>Population:XXXXXXX</p>
+                                    <p>AvgTemp: XX.X*</p>                                        
+                                    <p>Population: XXXXXXX</p>
                                 </div>
                             </div>
                             """;
@@ -454,8 +448,7 @@ public class PageIndex implements Handler {
                                 
                             <div class='Tab_Data_Container'>
                                 """;
-                                html = html + "<p>AvgTemp:" + getAvgTemp_CityYear(City_drop, CityYear_drop) + " degrees</p>";
-                                html = html + "<p>Population" + population_CityYear(City_drop, CityYear_drop) + " people</p>";
+                                html = html + "<p>AvgTemp: " + getAvgTemp_CityYear(City_drop, CityYear_drop) + " degrees</p>";
                                 
                                 html = html + """
                                     <p>This is where all the <i>City</i> data will go:)</p>
@@ -501,7 +494,7 @@ public class PageIndex implements Handler {
             
     }
 
-    public String getAvgTemp_World(String Year) throws Exception{
+    public static String getAvgTemp_World(String Year) throws Exception{
         JDBCConnection con = new JDBCConnection();
         String query = "Select AVG from Global where year = " + Year;
         ResultSet AvgTempDB = con.execute(query);
@@ -512,7 +505,7 @@ public class PageIndex implements Handler {
         return AvgTemp;
     }
 
-    public String getLandOceanAvg_World(String Year) throws Exception{
+    public static String getLandOceanAvg_World(String Year) throws Exception{
         JDBCConnection con = new JDBCConnection();
         String query = "Select LOAVG from Global where year = " + Year;
         ResultSet LandOceanAvgDB = con.execute(query);
@@ -523,7 +516,7 @@ public class PageIndex implements Handler {
         return LandOceanAvg;
     }
 
-    public String getPopulation_World(String Year) throws Exception{
+    public static String getPopulation_World(String Year) throws Exception{
         JDBCConnection con = new JDBCConnection();
         String query = "Select SUM(population) AS population from population where year = " + Year;
         ResultSet populationDB = con.execute(query);
@@ -531,7 +524,10 @@ public class PageIndex implements Handler {
         while (populationDB.next()){
             population = populationDB.getString("population");
         }
-        return population;
+        double amount = Double.parseDouble(population);
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        
+        return formatter.format(amount);
     }
 
     public String getAvgTemp_CountryYear(String Country, String Year) throws Exception{
@@ -553,26 +549,31 @@ public class PageIndex implements Handler {
         while (population_countryDB.next()){
             population_country = population_countryDB.getString("Population");
         }
-        return Year;
+        double amount = Double.parseDouble(population_country);
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        
+        return formatter.format(amount);
     }
 
-    public String getAvgTemp_StateYear(String State, String Year){
-
-        return Year;
+    public String getAvgTemp_StateYear(String State, String Year) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "Select AVG from State WHERE State = \"" + State + "\" AND year = " + Year + ";";
+        ResultSet AvgTemp_StateDB = con.execute(query);
+        String AvgTemp_State = "Does not exist";
+        while (AvgTemp_StateDB.next()){
+            AvgTemp_State = AvgTemp_StateDB.getString("AVG");
+        }
+        return AvgTemp_State;
     }
-
-    public String population_StateYear(String State, String Year){
-
-        return Year;
-    }    
-
-    public String getAvgTemp_CityYear(String City, String Year){
-
-        return Year;
-    }
-
-    public String population_CityYear(String City, String Year){
-
-        return Year;
-    }             
+    
+    public String getAvgTemp_CityYear(String City, String Year) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "Select AVG from City WHERE City = \"" + City + "\" AND year = " + Year + ";";
+        ResultSet AvgTemp_CityDB = con.execute(query);
+        String AvgTemp_City = "Does not exist";
+        while (AvgTemp_CityDB.next()){
+            AvgTemp_City = AvgTemp_CityDB.getString("AVG");
+        }
+        return AvgTemp_City;
+    }           
 }

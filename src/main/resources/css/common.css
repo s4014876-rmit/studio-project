@@ -125,10 +125,22 @@ body {
   background-color: inherit;
 }
  
+/* Table styling */
+table {
+  border: 2px solid;
+  overflow: scroll;
+  font-family: Cursor;
+}
 
+th {
+  border: 1px solid;
+}
 
+td {
+  border: 1px dotted;
+}
  
- 
+
  /*
    style for tabs 
  */

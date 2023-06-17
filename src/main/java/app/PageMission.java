@@ -31,8 +31,8 @@ public class PageMission implements Handler {
         """
         <style>
         .grid-container {
-            width:                  80%;
             display:                grid;
+            width:                  80%;
             grid-template-rows:     auto 20vh 25vh;
             grid-template-columns:  175px 175px 175px 175px 175px 175px;
             grid-column-gap:        25px;
@@ -108,16 +108,27 @@ public class PageMission implements Handler {
 
         html += "<div class='grid-container'>";
 
-        ResultSet students = con.execute("Select * From Student");
         //  Mission Statement
         html +=
         """
         <div class='mission'>
-        Filler
+        <h1>Our Mission</h1>
 
+        Our mission is such and such
 
-        </div>
+        <h1>Contributors</h1>
         """;
+        
+        ResultSet students = con.execute("Select * From Student");
+        while(students.next()){
+            html += "<p>" +
+            students.getString("Name") + ": " +
+            students.getString("StudentNum") + "</p>"
+            ;
+        }
+
+        html += "</div>";
+
 
 
         //  Personas

@@ -109,7 +109,12 @@ public class Database {
 
 				// Trim newline if accidentally placed in.
 				s[k] = s[k].trim();
-				
+
+				//Make NULL value if empty
+				if (s[k] == ""){
+					s[k] = "NULL";
+				}
+
 				//If it is a long/lat coordinate, remove final letter
 				try {
 					if (s[k].charAt(s[k].length() - 4) == '.'){
@@ -135,11 +140,15 @@ public class Database {
 			for(int i = 0; i <= k; i++){
 				int j = Integer.parseInt(String.valueOf(column.charAt(i)));
 
-				// If neither of the two functions fail, then write normally, else write with apostrophes.
-				try {  
-					Float.parseFloat(s[j]);
-					Integer.parseInt(s[j]);
-					fout.write(s[j]);
+				// If neither of the two functions fail, or it is a NULL value, then write normally, else write with apostrophes.
+				try {
+					if (s[j] == "NULL") {
+						fout.write(s[j]);
+					} else {
+						Float.parseFloat(s[j]);
+						Integer.parseInt(s[j]);
+						fout.write(s[j]);
+					}
 				}
 				catch (NumberFormatException e) {
 					fout.write("'" + s[j] + "'");
@@ -206,7 +215,15 @@ public class Database {
 					Population += c;
 					c_read(); 
 				}
-				
+
+				// Trim newline if accidentally placed in.
+				Population = Population.trim();
+
+				//Make NULL value if empty
+				if (Population == ""){
+					Population = "NULL";
+				}
+
 				// Output INSERT INTO statement
 				fout.write("INSERT INTO " + table_name + " VALUES (" + Integer.toString(Year)
 				+ ",'" + CountryName + "','" + CountryCode + "'," + Population.trim() + ");\n");

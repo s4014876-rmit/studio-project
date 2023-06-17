@@ -1,5 +1,7 @@
 package app;
 
+import java.sql.ResultSet;
+
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
@@ -85,6 +87,7 @@ public class PageST2B implements Handler {
         }
 
         .table-container {
+            background-color:      #eee;
             grid-area: 1 / 2 / 3 / 3;
             max-height: 70vh;
             display: block;
@@ -123,7 +126,18 @@ public class PageST2B implements Handler {
         </select> <br>
 
         <label for='CountryName'>Country Name</label><br>
-        <input type='text' id='CountryName' name='CountryName'> <br>
+        <select id='CountryName' name='CountryName'>
+        """;
+        JDBCConnection con = new JDBCConnection(); 
+        ResultSet Countries = con.execute("Select Distinct Country From Country Order by Country");
+        while (Countries.next()){
+            html +=
+            "<option value='" + Countries.getString("Country") +
+            "'>" + Countries.getString("Country") + "</option>";
+        }
+        html +=
+        """
+        </select> <br>
 
         <label for='StartYear'>Start Year</label><br>
         <input type='number' id='StartYear' name='StartYear' min='"""
@@ -153,8 +167,9 @@ public class PageST2B implements Handler {
         </form>
         """;
 
-
-        html += CommonElements.Table(SQL_Return(TableV, CityOrState, CountryName, StartYear, EndYear));
+        String test_query = SQL_Return(TableV, CityOrState, CountryName, StartYear, EndYear);
+        System.out.println(test_query);
+        html += CommonElements.Table(test_query);
 
 
 

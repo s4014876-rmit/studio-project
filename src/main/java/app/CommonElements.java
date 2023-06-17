@@ -17,6 +17,7 @@ public class CommonElements {
 		+ Title + 
 		"""
 			</title>
+			<meta charset="UTF-8">
 			<link rel='stylesheet' type='text/css' href='common.css' />
 		</head>
 		<body>

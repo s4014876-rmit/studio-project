@@ -3,6 +3,7 @@ package app;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class CommonElements {
 
 	//	Title is the string variable which gives the document its title.
@@ -16,6 +17,7 @@ public class CommonElements {
 		+ Title + 
 		"""
 			</title>
+			<meta charset="UTF-8">
 			<link rel='stylesheet' type='text/css' href='common.css' />
 		</head>
 		<body>
@@ -66,10 +68,16 @@ public class CommonElements {
 		
 		String html = "";
 		JDBCConnection con = new JDBCConnection();
+
 		ResultSet r = con.execute(query);
+		if(r == null){
+			System.out.println("r is null");
+			return "<div class='table-container'></div>";
+		}
 
 		int columnsCount = 0;
 		
+
 
 
 

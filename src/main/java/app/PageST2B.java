@@ -1,15 +1,9 @@
 package app;
 
-import java.util.ArrayList;
+import java.sql.ResultSet;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Example Index HTML class using Javalin
@@ -28,7 +22,7 @@ public class PageST2B implements Handler {
 
     /* Temperature Changes Table */
     private static String SQL_Temperature(String CityOrState, String Country, String StartYear, String EndYear) {
-        return "Select a.Year, a.Country, a."+CityOrState+", a.Avg - b.Avg as AvgChange, a.Min - b.Min as MinChange, a.Max - b.Max as MaxChange From City a, City b Where a.Country = b.Country and a."+CityOrState+" = b."+CityOrState+" and a.Year-1 = b.Year and a.Year >= "+StartYear+" and a.Year <= "+EndYear+" and a.Country='"+Country+"'";
+        return "Select a.Year, a.Country, a."+CityOrState+", a.Avg - b.Avg as AvgChange, a.Min - b.Min as MinChange, a.Max - b.Max as MaxChange From "+CityOrState+" a, "+CityOrState+" b Where a.Country = b.Country and a."+CityOrState+" = b."+CityOrState+" and a.Year-1 = b.Year and a.Year >= "+StartYear+" and a.Year <= "+EndYear+" and a.Country='"+Country+"'";
     }
 /* Ranking Of City/State Table */
     private static String SQL_Ranking(String CityOrState, String Country, String StartYear, String EndYear) {
@@ -93,6 +87,7 @@ public class PageST2B implements Handler {
         }
 
         .table-container {
+            background-color:      #eee;
             grid-area: 1 / 2 / 3 / 3;
             max-height: 70vh;
             display: block;
@@ -108,6 +103,12 @@ public class PageST2B implements Handler {
 
         html += "<div class='grid-container'>";
 
+        JDBCConnection con_min = new JDBCConnection();
+        JDBCConnection con_max = new JDBCConnection();
+        String form_min = con_min.execute("Select Min(Year) as a From City").getString("a");
+        String form_max = con_max.execute("Select Max(Year) as a From City").getString("a");
+        con_min.close();
+        con_max.close();
 
         html +=
         """
@@ -125,20 +126,50 @@ public class PageST2B implements Handler {
         </select> <br>
 
         <label for='CountryName'>Country Name</label><br>
-        <input type='text' id='CountryName' name='CountryName'> <br>
+        <select id='CountryName' name='CountryName'>
+        """;
+        JDBCConnection con = new JDBCConnection(); 
+        ResultSet Countries = con.execute("Select Distinct Country From Country Order by Country");
+        while (Countries.next()){
+            html +=
+            "<option value='" + Countries.getString("Country") +
+            "'>" + Countries.getString("Country") + "</option>";
+        }
+        html +=
+        """
+        </select> <br>
 
         <label for='StartYear'>Start Year</label><br>
-        <input type='text' id='StartYear' name='StartYear'> <br>
+        <input type='number' id='StartYear' name='StartYear' min='"""
+            +form_min+
+        """
+        ', max='"""
+            +form_max+
+        """
+        ' value='"""
+           +form_min+ 
+        """
+        '> <br>
 
         <label for='EndYear'>End Year</label><br>
-        <input type='text' id='EndYear' name='EndYear'> <br>
+        <input type='number' id='EndYear' name='EndYear' min='"""
+            +form_min+
+        """
+        ', max='"""
+            +form_max+
+        """
+        ' value='"""
+            +form_max+ 
+        """
+        '> <br>
 
         <input type='submit' value='Submit'>
         </form>
         """;
 
-
-        html += CommonElements.Table(SQL_Return(TableV, CityOrState, CountryName, StartYear, EndYear));
+        String test_query = SQL_Return(TableV, CityOrState, CountryName, StartYear, EndYear);
+        System.out.println(test_query);
+        html += CommonElements.Table(test_query);
 
 
 

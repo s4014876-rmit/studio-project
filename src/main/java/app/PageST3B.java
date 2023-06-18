@@ -177,14 +177,12 @@ public class PageST3B implements Handler {
 
 
         JDBCConnection con = new JDBCConnection();
-        String metric = "";
-        if (BeginYear != 0){
-            metric = con.execute(AA(Table, Rank, BeginYear, BeginYear+Period, Country, CityState)).getString("PreRanking");
-        }
         int MinYear = con.execute("Select Min(Year) as MIN From Global").getInt("MIN");
         int MaxYear = con.execute("Select Max(Year) as MAX From Global").getInt("MAX");
 
         if (run){
+            String metric = con.execute(AA(Table, Rank, BeginYear, BeginYear+Period, Country, CityState)).getString("PreRanking");
+
             String execute = "Create Table TempTable (Year Integer, Country varchar(20)";
             if(Table != "Country") {
                 execute += ", "+Table+" varchar(20)";

@@ -62,25 +62,30 @@ public class CommonElements {
 	}
 
 
+	// Generate a table from a query.
+	//The Table() function did not have the limit variable until later, hence why above there is an overloaded definition of Table(), which is for compatibility.
+
 	public static String Table(String query) {
+		JDBCConnection connection = new JDBCConnection();
+		String r = Table(query, 999999999, connection);
+		connection.close();
+		return r;
+	}
+
+	public static String Table(String query, int limit, JDBCConnection connection) {
 		if(query == null || query.isEmpty()){
 			return "<div class='table-container'></div>";
 		}
 		
 		String html = "";
-		JDBCConnection con = new JDBCConnection();
 
-		ResultSet r = con.execute(query);
+		ResultSet r = connection.execute(query);
 		if(r == null){
 			System.out.println("r is null");
 			return "<div class='table-container'></div>";
 		}
 
 		int columnsCount = 0;
-		
-
-
-
 
 		try {
 			columnsCount = r.getMetaData().getColumnCount();
@@ -109,7 +114,7 @@ public class CommonElements {
 
 		//	Contents of Table
 		try {
-			while(r.next()){
+			while(r.next() && limit > 0){
 				html += "<tr>";
 				for (int i = 1; i <= columnsCount; i++){
 					String temp = "";
@@ -121,6 +126,7 @@ public class CommonElements {
 					html += "<td>" + temp + "</td>";
 				}
 				html += "</tr>";
+				limit--;
 			}
 		} catch (SQLException e) {
 			System.out.println("ResultSet.next() failed in CommonElements.Table()");

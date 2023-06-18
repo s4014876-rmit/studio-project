@@ -22,7 +22,7 @@ public class PageST2B implements Handler {
 
     /* Temperature Changes Table */
     private static String SQL_Temperature(String CityOrState, String Country, String StartYear, String EndYear) {
-        return "Select a.Year, a.Country, a."+CityOrState+", a.Avg - b.Avg as AvgChange, a.Min - b.Min as MinChange, a.Max - b.Max as MaxChange From "+CityOrState+" a, "+CityOrState+" b Where a.Country = b.Country and a."+CityOrState+" = b."+CityOrState+" and a.Year-1 = b.Year and a.Year >= "+StartYear+" and a.Year <= "+EndYear+" and a.Country='"+Country+"'";
+        return "Select a.Year, a.Country, a."+CityOrState+", a.Avg,Round(a.Avg - b.Avg,3) as AvgChange, a.Min,Round(a.Min - b.Min,3) as MinChange, a.Max,Round(a.Max - b.Max,3) as MaxChange From "+CityOrState+" a, "+CityOrState+" b Where a.Country = b.Country and a."+CityOrState+" = b."+CityOrState+" and a.Year-1 = b.Year and a.Year >= "+StartYear+" and a.Year <= "+EndYear+" and a.Country='"+Country+"'";
     }
 /* Ranking Of City/State Table */
     private static String SQL_Ranking(String CityOrState, String Country, String StartYear, String EndYear) {

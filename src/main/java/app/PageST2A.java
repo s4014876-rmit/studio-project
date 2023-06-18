@@ -2,6 +2,8 @@ package app;
 
 import java.util.ArrayList;
 
+import org.intellij.lang.annotations.JdkConstants;
+
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
@@ -89,27 +91,11 @@ public class PageST2A implements Handler {
                 String WorldYearMin_drop = context.formParam("WorldYearMin_drop");
                 String WorldYearMax_drop = context.formParam("WorldYearMax_drop");
 
-                html = html + """
-                <div class='Tab_Content_Graph_Container'>
-                    <div class='Tab_Content_Graph'>
-                        <h4>WorldAvgTemp</h4>
-                    </div>
-                    <div class='Tab_Content_Graph'>
-                        <h4>WorldOceanLandTemp</h4>
-                    </div>
-                    <div class='Tab_Content_Graph'>
-                        <h4>WorldPopulation</h1>
-                    </div>
-                </div>
-
-                """;
-
                 if(WorldYearMin_drop == null || WorldYearMax == null){
 
                 html = html + "<div class='Tab_Data_Container'>";           
                     
                          html = html + "<p>AvgTemp diff: " + CommonElements.nodata() + "</p>";
-                         html = html + "<p>LandOCeanAvg diff: " + CommonElements.nodata() + "</p>";
                          html = html + "<p>Population diff: " + CommonElements.nodata() + "</p>";
                      html = html + "</div>";
                 }
@@ -120,9 +106,6 @@ public class PageST2A implements Handler {
                         html = html + "<p>Year selected: " + WorldYearMin_drop + " - " + WorldYearMax_drop + "</p>";
                         html = html + "<p>Average temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
                         html = html + "<p>Average temp difference: " + getAvgTempDiff("global", WorldYearMin_drop, WorldYearMax_drop) + "</p><br></br>";
-
-                        html = html + "<p>LandOceanAverage temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
-                        html = html + "<p>Average land Ocean temp difference: " + getLandOceanAvgDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
 
                         html = html + "<p>Population Year: " + WorldYearMin_drop + " = " + PageIndex.getPopulation_World(WorldYearMin_drop) + "</p>";
                         html = html + "<p>Population Year: " + WorldYearMax_drop + " = " + PageIndex.getPopulation_World(WorldYearMax_drop) + "</p>";
@@ -208,16 +191,7 @@ public class PageST2A implements Handler {
                 String CountryYearMin_drop = context.formParam("CountryYearMin_drop");
                 String CountryYearMax_drop = context.formParam("CountryYearMax_drop");
 
-                html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CountryAvgTemp<h4>
-                        </div>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CountryPopulation<h4>
-                        </div>
-                    </div>
-                    """;
+               
                             
                 if(Country_drop == null|| CountryYearMin_drop == null || CountryYearMax_drop == null){
                     html = html + "<div class='Tab_Data_Container'>";
@@ -236,9 +210,9 @@ public class PageST2A implements Handler {
                         html = html + "<p>Average Temp: " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMin_drop) + " - " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMax_drop) + "</p>";                                
                         //html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_CountryYear(CountryYearMin_drop, CountryYearMax_drop) + " </p><br>";
 
-                        html = html + "<p>Population Year: " + CountryYearMin_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMin_drop) + " people";
-                        html = html + "<p>Population Year: " + CountryYearMax_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMax_drop) + " people";
-                        html = html + "<p>Population change: " + getPopulationDiff(Country_drop, WorldYearMin_drop, WorldYearMax_drop) + " people";
+                        html = html + "<p>Population Year: " + CountryYearMin_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMin_drop);
+                        html = html + "<p>Population Year: " + CountryYearMax_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMax_drop);
+                        //html = html + "<p>Population change: " + getPopulationDiff(Country_drop, WorldYearMin_drop, WorldYearMax_drop) + " people";
 
                         query = "Select IFNULL(c.year, \"no data\") AS Year, IFNULL(c.country, \"no data\") AS Country, IFNULL(c.avg, \"no data\") AS Avg, IFNULL(c.min,\"no data\") AS Min, IFNULL(c.max, \"no data\") AS Max, IFNULL(p.population, \"no data\") AS Population from Country c LEFT JOIN population p ON p.country = c.country AND p.year = c.year Where c.country = '" + Country_drop + "' AND c.Year Between " + CountryYearMin_drop + " AND " + CountryYearMax_drop;
 
@@ -288,13 +262,6 @@ public class PageST2A implements Handler {
                 String StateYearMin_drop = context.formParam("StateYearMin_drop");
                 String StateYearMax_drop = context.formParam("StateYearMax_drop");
                
-                html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>StateAvgTemp<h4>
-                        </div>
-                    </div>
-                    """;
                 
                 if(State_drop == null|| StateYearMin_drop == null || StateYearMax_drop == null){
                     html = html + "<div class='Tab_Data_Container'>";
@@ -359,14 +326,6 @@ public class PageST2A implements Handler {
                 String CityYearMin_drop = context.formParam("CityYearMin_drop");
                 String CityYearMax_drop = context.formParam("CityYearMax_drop");
                 
-                html = html + """
-                <div class='Tab_Content_Graph_Container'>
-                    <div class='Tab_Content_Graph'>
-                        <h4>CityAvgTemp<h4>
-                    </div>
-                </div>
-                """;
-
                 if(City_drop == null|| CityYearMin_drop == null || CityYearMax_drop == null){
                     html = html + "<div class='Tab_Data_Container'>";
                         html = html + "<p>AvgTemp:" + CommonElements.nodata() + "</p>";
@@ -420,7 +379,7 @@ public class PageST2A implements Handler {
         JDBCConnection con = new JDBCConnection();
         String query = "SELECT ((SELECT AVG FROM " + region + " WHERE year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year DESC LIMIT 1) - (SELECT AVG FROM "  + region + " WHERE year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year ASC LIMIT 1)) / (SELECT AVG FROM " + region + " WHERE year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year ASC LIMIT 1) * 100 AS AVG";
         ResultSet AvgTempDiffDB = con.execute(query);
-        String AvgTempDiff = "does not exist";
+        String AvgTempDiff = "data not found in range";
         while(AvgTempDiffDB.next()){
             AvgTempDiff = AvgTempDiffDB.getString("AVG");
         } 
@@ -435,14 +394,33 @@ public class PageST2A implements Handler {
         }
         
     }
-    public String getLandOceanAvgDiff(String region, String YearMin, String YearMax){
-        return YearMin;
-    }
+    
 
-    public String getPopulationDiff(String region, String YearMin, String YearMax){
-        return YearMin;
+    public String getPopulationDiff(String region, String YearMin, String YearMax) throws Exception{
+        String population = "no data found in range";
+        if(Double.parseDouble(YearMax) <= Double.parseDouble(CommonElements.getMaxYear("Population", YearMax)) && Double.parseDouble(YearMin) >= Double.parseDouble(CommonElements.getMinYear("Population", YearMin)) ){
+            JDBCConnection con = new JDBCConnection();
+            String query = "SELECT CAST((SELECT population FROM population WHERE Country = '" + region + "' AND year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year DESC LIMIT 1) - (SELECT population FROM population WHERE Country = '" + region + "' AND year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year ASC LIMIT 1) AS FLOAT) / (SELECT population FROM population WHERE Country = '" + region + "' AND year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year ASC LIMIT 1) * 100 AS populationDiff;";
+            ResultSet populationDiffDB = con.execute(query);
+            String populationDiff = "no data found in range";
+            while(populationDiffDB.next()){
+                populationDiff = populationDiffDB.getString("AVG");
+            } 
+            if (Double.parseDouble(populationDiff) > 0){
+                return populationDiff + "% increase";
+            }
+            else if (Double.parseDouble(populationDiff) < 0){
+                return populationDiff + "% decrease";
+            }
+            else if (Double.parseDouble(populationDiff) < 0){
+                return populationDiff;
+            }
+        }
+        else{
+            return population;
+        }
+        return population;
     }
-
     public String getAvgTempDiff_CountryYear(String YearMin, String YearMax){
         return YearMin;
     }

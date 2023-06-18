@@ -6,6 +6,7 @@
 .Disp_Container{
     position: static;
     flex: 3;
+    background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-left: 2%;
     margin-right: 2%;
@@ -27,6 +28,7 @@
     position: static;
     display: flex;
     flex: 6;
+    background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-left: 2%;
     margin-right: 2%;
@@ -37,6 +39,8 @@
 
 .Tab_Content_Graph_Container{
     display: flex;
+   
+
 }
 
 .Tab_Content_Graph{

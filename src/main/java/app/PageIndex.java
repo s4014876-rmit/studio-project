@@ -55,8 +55,7 @@ public class PageIndex implements Handler {
         html = html + """
         <div class='Disp_Container'>
             <div class='World_Image'>
-                <h3>Picture of world i guess</h3>
-                <p>not really sure tho</p>
+                <img src='World_map.png' style='width: 100%'>
             </div>
             """;
             //Data Ranges Display
@@ -64,14 +63,17 @@ public class PageIndex implements Handler {
             <div class='Data_Ranges'>
                 """;
                 //data range display values
-                html = html + "<h4>AvgGlobalTemp</h4>";
-                html = html + "<p> |------------------| <p>" + CommonElements.getMinYear("global", "AVG") + " - " +  CommonElements.getMaxYear("global", "AVG");
+                html = html + "<h4>AvgGlobalTemp:</h4>";
+                html = html + "<h7>data range: </h7>";
+                html = html + CommonElements.getMinYear("global", "AVG") + " - " +  CommonElements.getMaxYear("global", "AVG");
 
                 html = html + "<h4>LandOceanAvgTemp</h4>";
-                html = html + "<p> |------------------| <p>" + CommonElements.getMinYear("global", "LOAVG") + " - " +  CommonElements.getMaxYear("global", "LOAVG");
+                html = html + "<h7>data range: </h7>";
+                html = html + CommonElements.getMinYear("global", "LOAVG") + " - " +  CommonElements.getMaxYear("global", "LOAVG");
 
                 html = html + "<h4>TotalPopulation</h4>";
-                html = html + "<p> |------------------| " + CommonElements.getMinYear("population", "population") + " - " +  CommonElements.getMaxYear("population", "population");
+                html = html + "<h7>data range: </h7>";
+                html = html + CommonElements.getMinYear("population", "population") + " - " +  CommonElements.getMaxYear("population", "population");
 ;
 
                 html = html + """
@@ -104,19 +106,6 @@ public class PageIndex implements Handler {
                     //form param for year selection
                     String WorldYear_drop = context.formParam("WorldYear_drop");
                     
-                    html = html + """                                
-                        <div class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>WorldAvgTemp</h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>WorldOceanLandTemp</h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>WorldPopulation</h1>
-                            </div>
-                        </div>
-                        """;
 
                     if (WorldYear_drop == null){
                         html = html + "<div class='Tab_Data_Container'>";
@@ -164,17 +153,6 @@ public class PageIndex implements Handler {
                     //form param for country selection
                     String Country_drop = context.formParam("Country_drop");
                     String CountryYear_drop = context.formParam("CountryYear_drop");
-
-                    html = html + """
-                        <div class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CountryAvgTemp<h4>
-                            </div>
-                            <div class='Tab_Content_Graph'>
-                                <h4>CountryPopulation<h4>
-                            </div>
-                        </div>
-                        """;
 
                     if (Country_drop == null || CountryYear_drop == null){
                         html = html + "<div class='Tab_Data_Container'>";
@@ -229,13 +207,6 @@ public class PageIndex implements Handler {
                     //form param for state selection
                     String State_drop = context.formParam("State_drop");
                     String StateYear_drop = context.formParam("StateYear_drop");
-                    html = html + """
-                        <class='Tab_Content_Graph_Container'>
-                            <div class='Tab_Content_Graph'>
-                                <h4>StateAvgTemp</h4>
-                            </div
-                        </div>
-                        """;
 
                     if (State_drop == null || StateYear_drop == null){
                         html = html + "<div class='Tab_Data_Container'>";
@@ -248,7 +219,7 @@ public class PageIndex implements Handler {
                             
                         <div class='Tab_Data_Container'>
                             """;
-                            html = html + "<p>AvgTemp: " + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
+                            html = html + "<p>AvgTemp: " + getAvgTemp_StateYear(State_drop, StateYear_drop);
                             
                             html = html + """
                         </div>
@@ -281,13 +252,6 @@ public class PageIndex implements Handler {
                 //form param for city selection
                 String City_drop = context.formParam("City_drop");
                 String CityYear_drop = context.formParam("CityYear_drop");
-                html = html + """
-                    <div class='Tab_Content_Graph_Container'>
-                        <div class='Tab_Content_Graph'>
-                            <h4>CityAvgTemp</h4>
-                        </div>
-                    </div>
-                    """;
                     
                     if (City_drop == null || CityYear_drop == null){
                         html = html + "<div class='Tab_Data_Container'>";
@@ -344,7 +308,7 @@ public class PageIndex implements Handler {
     }
 
     public static String getPopulation_World(String Year) throws Exception{
-        String population = CommonElements.nodata();
+        String population = "no data found in range";
         if(Double.parseDouble(Year) <= Double.parseDouble(CommonElements.getMaxYear("Population", Year)) && Double.parseDouble(Year) >= Double.parseDouble(CommonElements.getMinYear("Population", Year)) ){
             JDBCConnection con = new JDBCConnection();
             String query = "Select SUM(population) AS population from population where year = " + Year;
@@ -372,7 +336,7 @@ public class PageIndex implements Handler {
     }
 
     public static String getpopulation_CountryYear(String Country, String Year) throws Exception{
-        String population = CommonElements.nodata();
+        String population = "no data found in range";
         if(Double.parseDouble(Year) <= Double.parseDouble(CommonElements.getMaxYear("Population", Year)) && Double.parseDouble(Year) >= Double.parseDouble(CommonElements.getMinYear("Population", Year)) ){
             JDBCConnection con = new JDBCConnection();
             String query = "Select population from population WHERE Country = \"" + Country + "\" AND year = " + Year + ";";
@@ -390,6 +354,7 @@ public class PageIndex implements Handler {
     }
 
     public String getAvgTemp_StateYear(String State, String Year) throws Exception{
+
         JDBCConnection con = new JDBCConnection();
         String query = "Select AVG from State WHERE State = \"" + State + "\" AND year = " + Year + ";";
         ResultSet AvgTemp_StateDB = con.execute(query);
@@ -397,7 +362,13 @@ public class PageIndex implements Handler {
         while (AvgTemp_StateDB.next()){
             AvgTemp_State = AvgTemp_StateDB.getString("AVG");
         }
-        return AvgTemp_State;
+        if (AvgTemp_State == null){
+            return "no data found in range";
+        }
+        else{
+            return AvgTemp_State + " degrees";
+        }
+        
     }
     
     public String getAvgTemp_CityYear(String City, String Year) throws Exception{
@@ -407,6 +378,9 @@ public class PageIndex implements Handler {
         String AvgTemp_City = "Does not exist";
         while (AvgTemp_CityDB.next()){
             AvgTemp_City = AvgTemp_CityDB.getString("AVG");
+        }
+        if (AvgTemp_City == null){
+            return "no data found in range";
         }
         return AvgTemp_City;
     }            

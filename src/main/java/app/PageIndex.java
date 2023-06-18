@@ -119,14 +119,12 @@ public class PageIndex implements Handler {
                         """;
 
                     if (WorldYear_drop == null){
-                        html = html + """                                
-                        <div class='Tab_Data_Container'>
-                            <p>AvgTemp: XX.X*</p>
-                            <p>LandOCeanAvg: XX.X*</p>
-                            <p>Population: XXXXXXX</p>
-                        </div>
-                    </div>
-                    """;
+                        html = html + "<div class='Tab_Data_Container'>";
+                            html = html + "<p>AvgTemp: " + CommonElements.nodata() + "</p>";
+                            html = html + "<p>LandOCeanAvg: " + CommonElements.nodata() + "</p>";
+                            html = html + "<p>Population: " + CommonElements.nodata() + "</p>";
+                        html = html + "</div>";
+                    html = html + "</div>";
                     }
                     else {
                         html = html + """                                
@@ -134,7 +132,7 @@ public class PageIndex implements Handler {
                             """;
                             html = html + "<p>AvgTemp: " + getAvgTemp_World(WorldYear_drop) + " degrees</p>";
                             html = html + "<p>LandOcreanAvg: " + getLandOceanAvg_World(WorldYear_drop) + " degrees</p>";
-                            html = html + "<p>Population: " + getPopulation_World(WorldYear_drop) + " people";
+                            html = html + "<p>Population: " + getPopulation_World(WorldYear_drop);
                                     
                             html = html + """
                                 <p>This is where all the <i>World</i> data will go:)</p>
@@ -180,20 +178,18 @@ public class PageIndex implements Handler {
                         """;
 
                     if (Country_drop == null || CountryYear_drop == null){
-                        html = html + """
-                        <div class='Tab_Data_Container'>
-                            <p>AvgTemp:XX.X*</p>
-                            <p>Population: XXXXXXX</p>
-                        </div>
-                    </div>
-                    """;
+                        html = html + "<div class='Tab_Data_Container'>";
+                            html = html +"<p>AvgTemp:" + CommonElements.nodata() + "</p>";
+                            html = html + "<p>Population:" + CommonElements.nodata() + "</p>";
+                        html= html + "</div>";
+                    html = html + "</div>";
                     }
                     else {
                         html = html + """
                         <div class='Tab_Data_Container'>
                             """;
                             html = html + "<p>AvgTemp: " + getAvgTemp_CountryYear(Country_drop, CountryYear_drop) + " degrees</p>";
-                            html = html + "<p>Population: " + getpopulation_CountryYear(Country_drop, CountryYear_drop) + " people</p>";
+                            html = html + "<p>Population: " + getpopulation_CountryYear(Country_drop, CountryYear_drop);
 
                             html = html + """        
                                 <p>This is where all the <i>Country</i> data will go:)</p>
@@ -244,13 +240,10 @@ public class PageIndex implements Handler {
                         """;
 
                     if (State_drop == null || StateYear_drop == null){
-                        html = html + """
-                                
-                        <div class='Tab_Data_Container'>
-                            <p>AvgTemp: XX.X*</p>       
-                        </div>
-                    </div>
-                    """;
+                        html = html + "<div class='Tab_Data_Container'>";
+                            html = html + "<p>AvgTemp:" + CommonElements.nodata() + "</p>";       
+                        html = html + "</div>";
+                    html = html + "</div>";
                     }
                     else{
                         html = html + """
@@ -300,14 +293,10 @@ public class PageIndex implements Handler {
                     """;
                     
                     if (City_drop == null || CityYear_drop == null){
-                        html = html + """
-
-                            <div class='Tab_Data_Container'>
-                                <p>AvgTemp: XX.X*</p>                                        
-                                <p>Population: XXXXXXX</p>
-                            </div>
-                        </div>
-                            """;
+                        html = html + "<div class='Tab_Data_Container'>";
+                            html = html + "<p>AvgTemp:" + CommonElements.nodata() + "</p>";
+                            html = html + "</div>";
+                        html = html + "</div>";
                         }
                     else{
                         html = html + """ 
@@ -358,7 +347,7 @@ public class PageIndex implements Handler {
     }
 
     public static String getPopulation_World(String Year) throws Exception{
-        String population = "XXXXXXX";
+        String population = CommonElements.nodata();
         if(Double.parseDouble(Year) <= Double.parseDouble(CommonElements.getMaxYear("Population", Year)) && Double.parseDouble(Year) >= Double.parseDouble(CommonElements.getMinYear("Population", Year)) ){
             JDBCConnection con = new JDBCConnection();
             String query = "Select SUM(population) AS population from population where year = " + Year;
@@ -386,7 +375,7 @@ public class PageIndex implements Handler {
     }
 
     public static String getpopulation_CountryYear(String Country, String Year) throws Exception{
-        String population = "XXXXXXX";
+        String population = CommonElements.nodata();
         if(Double.parseDouble(Year) <= Double.parseDouble(CommonElements.getMaxYear("Population", Year)) && Double.parseDouble(Year) >= Double.parseDouble(CommonElements.getMinYear("Population", Year)) ){
             JDBCConnection con = new JDBCConnection();
             String query = "Select population from population WHERE Country = \"" + Country + "\" AND year = " + Year + ";";

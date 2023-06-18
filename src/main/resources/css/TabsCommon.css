@@ -34,6 +34,7 @@
     align-self: flex-start;
 }
 
+
 .Tab_Content_Graph_Container{
     display: flex;
 }
@@ -60,7 +61,7 @@
  */
 
  /*tabcontainer*/
- .tabs {
+ .tabs{
     display: flex;
     flex-wrap: wrap;
     max-width: 600px;
@@ -96,4 +97,31 @@
   .tabs_radio:checked + .tabs_label + .tabs_content {
     display: initial;
   }
- 
+
+
+
+
+  .tabs_sort{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .tabs_radio_sort:checked + .tabs_label_sort {
+    font-weight: bold;
+    color: #009578;
+    border-bottom: 2px solid #009578;
+  }
+  .tabs_label_sort{
+    padding: 0px 5px;
+    cursor: pointer;
+    font-size: small;
+  }
+
+  .tabs_content_sort{
+    order: 1;
+    width: 100%;
+    display: none;
+
+  }
+  .tabs_radio_sort:checked + .tabs_label_sort + .tabs_content_sort{
+    display: initial;
+  }

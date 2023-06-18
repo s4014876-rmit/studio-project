@@ -56,14 +56,16 @@ public class PageST2A implements Handler {
 
         //Tabs and tab content 
         //Tab container
-        html = html + CommonElements.tabContainer();
             
+        html = html + CommonElements.tabContainer();
+        html = html + CommonElements.tabContainer();
             //Create World Tab
             html = html + CommonElements.tabLabel("World", "checked");
                 
                 //Content for world tab
                 //dropdown menus
                 html = html + CommonElements.dropdownFormOpen("World", "/page2A.html");
+
                     html = html + CommonElements.dropDownOptionOpen("WorldYearMin", "YearMin", " -- Select a start Year -- ");
 
                     ResultSet WorldYearMin = con.execute("Select DISTINCT Year from Global ORDER BY Year ASC;");
@@ -74,7 +76,7 @@ public class PageST2A implements Handler {
                     html = html + CommonElements.dropDownOptionClose();
                                      
                     html = html + CommonElements.dropDownOptionOpen("WorldYearMax", "YearMax", " -- Select an end Year -- ");
-
+                        
                         ResultSet WorldYearMax = con.execute("Select DISTINCT Year from Global ORDER BY Year DESC;");
                         while(WorldYearMax.next()){
                             html = html + "<option value='" + WorldYearMax.getString("Year") + "'>" + WorldYearMax.getString("Year") + "</option>";
@@ -104,13 +106,12 @@ public class PageST2A implements Handler {
 
                 if(WorldYearMin_drop == null || WorldYearMax == null){
 
-                html = html + """            
-                    <div class='Tab_Data_Container'>
-                        <p>AvgTemp diff: XX.X*</p>
-                        <p>LandOCeanAvg diff: XX.X*</p>
-                        <p>Population diff: XXXXXXX people</p>
-                    </div>
-                """;
+                html = html + "<div class='Tab_Data_Container'>";           
+                    
+                         html = html + "<p>AvgTemp diff: " + CommonElements.nodata() + "</p>";
+                         html = html + "<p>LandOCeanAvg diff: " + CommonElements.nodata() + "</p>";
+                         html = html + "<p>Population diff: " + CommonElements.nodata() + "</p>";
+                     html = html + "</div>";
                 }
                 else {
                     html = html + """                                
@@ -118,10 +119,10 @@ public class PageST2A implements Handler {
                     """;
                         html = html + "<p>Year selected: " + WorldYearMin_drop + " - " + WorldYearMax_drop + "</p>";
                         html = html + "<p>Average temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
-                        html = html + "<p>Average temp difference: " + getAvgTempDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
+                        html = html + "<p>Average temp difference: " + getAvgTempDiff("global", WorldYearMin_drop, WorldYearMax_drop) + "</p><br></br>";
 
                         html = html + "<p>LandOceanAverage temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
-                        html = html + "<p>Average temp difference: " + getLandOceanAvgDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
+                        html = html + "<p>Average land Ocean temp difference: " + getLandOceanAvgDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
 
                         html = html + "<p>Population Year: " + WorldYearMin_drop + " = " + PageIndex.getPopulation_World(WorldYearMin_drop) + " people";
                         html = html + "<p>Population Year: " + WorldYearMax_drop + " = " + PageIndex.getPopulation_World(WorldYearMax_drop) + " people";
@@ -140,17 +141,51 @@ public class PageST2A implements Handler {
 
                 //Content for Country Tab
                 html = html + CommonElements.dropdownFormOpen("Country", "/page2A.html");
-                    html = html + CommonElements.dropDownOptionOpen("Country", "Country", " -- Select a Country -- ");
 
-                        ResultSet CountryList = con.execute("Select DISTINCT Country from Country Order BY Country DESC;");
-                        while(CountryList.next()){
-                            html = html + "<option value='" + CountryList.getString("Country") + "'>" + CountryList.getString("Country") + "</option>";
-                        }
+                    html = html + CommonElements.tabContainer_sort();
+
+                        html = html + CommonElements.tabLabel_sort("Alphabetical", "not checked");
+
+                            html = html + CommonElements.dropDownOptionOpen("Country", "Country", " -- Select a Country -- ");
+
+                                ResultSet CountryList = con.execute("Select DISTINCT Country from Country Order BY Country ASC;");
+                                while(CountryList.next()){
+                                    html = html + "<option value='" + CountryList.getString("Country") + "'>" + CountryList.getString("Country") + "</option>";
+                                }
+                        
+                            html = html + CommonElements.dropDownOptionClose();
+                        html = html + "</div>";
+                        
+                        html = html + CommonElements.tabLabel_sort("Temperature", "not checked");
+
+                            html = html + CommonElements.dropDownOptionOpen("Country", "Country", " -- Select a Country -- ");
+
+                                ResultSet CountryList2 = con.execute("Select DISTINCT Country from Country Order BY avg DESC;");
+                                while(CountryList2.next()){
+                                    html = html + "<option value='" + CountryList2.getString("Country") + "'>" + CountryList.getString("Country") + "</option>";
+                                }
+                        
+                                html = html + CommonElements.dropDownOptionClose();
+                            html = html + "</div>";
+                        
+                        html = html + CommonElements.tabLabel_sort("Population", "not checked");
+
+                            html = html + CommonElements.dropDownOptionOpen("Country", "Country", " -- Select a Country -- ");
+
+                            ResultSet CountryList3 = con.execute("Select MAX(population), country from population GROUP BY country Order By population desc;");
+                            while(CountryList3.next()){
+                                html = html + "<option value='" + CountryList3.getString("Country") + "'>" + CountryList3.getString("Country") + "</option>";
+                            }
+                        
                     html = html + CommonElements.dropDownOptionClose();
+                html = html + "</div>";
+                    html = html + "</div>";
+
+                    html = html + "</div>";
 
                     html = html + CommonElements.dropDownOptionOpen("CountryYearMin", "YearMin", " -- Select a start Year -- ");
 
-                        ResultSet CountryYearMin = con.execute("Select DISTINCT Year from Country ORDER BY Year DESC;");
+                        ResultSet CountryYearMin = con.execute("Select DISTINCT Year from Country ORDER BY Year ASC;");
                         while(CountryYearMin.next()){
                             html = html + "<option value='" + CountryYearMin.getString("Year") + "'>" + CountryYearMin.getString("Year") + "</option>";
                         }
@@ -185,13 +220,11 @@ public class PageST2A implements Handler {
                     """;
                             
                 if(Country_drop == null|| CountryYearMin_drop == null || CountryYearMax_drop == null){
-                    html = html + """
-                        <div class='Tab_Data_Container'>
-                            <p>AvgTemp:XX.X*</p>
-                            <p>Population: XXXXXXX</p>
-                        </div>
-                    </div> 
-                """;
+                    html = html + "<div class='Tab_Data_Container'>";
+                            html = html + "<p>AvgTemp: " + CommonElements.nodata() + "</p>";
+                            html = html + "<p>Population: " + CommonElements.nodata() + "</p>";
+                        html = html + "</div>";
+                    html = html + "</div>"; 
                 }
 
                 else {   
@@ -201,13 +234,13 @@ public class PageST2A implements Handler {
                         html = html + "<p>Country selected: " + Country_drop + "</p>";
                         html = html + "<p>Year selected: " + CountryYearMin_drop + " - " + CountryYearMax_drop + "</p><br>";
                         html = html + "<p>Average Temp: " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMin_drop) + " - " + PageIndex.getAvgTemp_CountryYear(Country_drop, CountryYearMax_drop) + "</p>";                                
-                        html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_CountryYear(CountryYearMin_drop, CountryYearMax_drop) + " </p><br>";
+                        //html = html + "<p>AvgTemp Diff: " + getAvgTempDiff_CountryYear(CountryYearMin_drop, CountryYearMax_drop) + " </p><br>";
 
                         html = html + "<p>Population Year: " + CountryYearMin_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMin_drop) + " people";
                         html = html + "<p>Population Year: " + CountryYearMax_drop + " = " + PageIndex.getpopulation_CountryYear(Country_drop, CountryYearMax_drop) + " people";
                         html = html + "<p>Population change: " + getPopulationDiff(Country_drop, WorldYearMin_drop, WorldYearMax_drop) + " people";
-                        
-                        query = "Select * from Country Where Country = '" + Country_drop + "' AND Year Between " + CountryYearMin_drop + " AND " + CountryYearMax_drop;
+
+                        query = "Select IFNULL(c.year, \"no data\") AS Year, IFNULL(c.country, \"no data\") AS Country, IFNULL(c.avg, \"no data\") AS Avg, IFNULL(c.min,\"no data\") AS Min, IFNULL(c.max, \"no data\") AS Max, IFNULL(p.population, \"no data\") AS Population from Country c LEFT JOIN population p ON p.country = c.country AND p.year = c.year Where c.country = '" + Country_drop + "' AND c.Year Between " + CountryYearMin_drop + " AND " + CountryYearMax_drop;
 
                         html = html + """
                             
@@ -264,12 +297,10 @@ public class PageST2A implements Handler {
                     """;
                 
                 if(State_drop == null|| StateYearMin_drop == null || StateYearMax_drop == null){
-                    html = html + """
-                        <div class='Tab_Data_Container'>
-                            <p>AvgTemp:XX.X*</p>
-                        </div>
-                    </div>
-                    """;
+                    html = html + "<div class='Tab_Data_Container'>";
+                            html = html + "<p>AvgTemp: " + CommonElements.nodata() + "</p>";
+                        html = html + "</div>";
+                    html = html + "</div>";
                 }
                 else {
                 html = html + """
@@ -278,7 +309,7 @@ public class PageST2A implements Handler {
                         html = html + "<p>State selected: " + State_drop + "</p>";
                         html = html + "<p>Year selected: " + StateYearMin_drop + " - " + StateYearMax_drop + "</p><br>";
 
-                        html = html + "<p>AvgTemp Diff: " + getAvgTempDiff(State_drop, StateYearMin_drop, StateYearMax_drop) + " degrees</p>";
+                        //html = html + "<p>AvgTemp Diff: " + getAvgTempDiff("State", State_drop, StateYearMin_drop, StateYearMax_drop) + " degrees</p>";
                         // query for table
                         query = "Select * from State Where State = '" + State_drop + "' AND Year Between " + StateYearMin_drop + " AND " + StateYearMax_drop;
                     
@@ -337,13 +368,10 @@ public class PageST2A implements Handler {
                 """;
 
                 if(City_drop == null|| CityYearMin_drop == null || CityYearMax_drop == null){
-                    html = html + """
-                    
-                    <div class='Tab_Data_Container'>
-                        <p>AvgTemp:XX.X*</p>
-                    </div>
-                </div>
-                """;
+                    html = html + "<div class='Tab_Data_Container'>";
+                        html = html + "<p>AvgTemp:" + CommonElements.nodata() + "</p>";
+                    html = html + "</div>";
+                html = html + "</div>";
                 }
                 else {
                     html = html + """
@@ -352,7 +380,7 @@ public class PageST2A implements Handler {
                     html = html + "<p>City selected: " + City_drop + "</p>";
                     html = html + "<p>Year selected: " + CityYearMin_drop + " - " + CityYearMax_drop + "</p><br>";
 
-                    html = html + "<p>AvgTemp Diff: " + getAvgTempDiff(City_drop, CityYearMin_drop, CityYearMax_drop) + " degrees</p>";
+                    //html = html + "<p>AvgTemp Diff: " + getAvgTempDiff("City", City_drop, CityYearMin_drop, CityYearMax_drop) + " degrees</p>";
                     
                     // query for table
                     query = "Select * from City Where City = '" + City_drop + "' AND Year Between " + CityYearMin_drop + " AND " + CityYearMax_drop;
@@ -363,10 +391,12 @@ public class PageST2A implements Handler {
                 }
                 //close tabs
                 html = html + "</dv>";
+                html = html + "</div>";
             //close tab container
             html = html + "</div>";
+            html = html + "</div>";
         html = html + """
-            <div class='table'>
+            <div class='table_container'>
             """;
             
             html = html + CommonElements.Table(query);
@@ -374,11 +404,8 @@ public class PageST2A implements Handler {
 
             html = html + "</div>";
      
-
-
-
-
-        //close tab conatianer
+            
+        //close table conatianer
         html = html + "</div>";
 
 
@@ -389,8 +416,24 @@ public class PageST2A implements Handler {
         context.html(html);
     }
 
-    public String getAvgTempDiff(String region, String YearMin, String YearMax){
-        return YearMin;
+    public String getAvgTempDiff(String region, String YearMin, String YearMax) throws Exception{
+        JDBCConnection con = new JDBCConnection();
+        String query = "SELECT ((SELECT AVG FROM " + region + " WHERE year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year DESC LIMIT 1) - (SELECT AVG FROM "  + region + " WHERE year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year ASC LIMIT 1)) / (SELECT AVG FROM " + region + " WHERE year BETWEEN " + YearMin + " AND " + YearMax + " ORDER BY Year ASC LIMIT 1) * 100 AS AVG";
+        ResultSet AvgTempDiffDB = con.execute(query);
+        String AvgTempDiff = "does not exist";
+        while(AvgTempDiffDB.next()){
+            AvgTempDiff = AvgTempDiffDB.getString("AVG");
+        } 
+        if (Double.parseDouble(AvgTempDiff) > 0){
+            return AvgTempDiff + "% increase";
+        }
+        else if (Double.parseDouble(AvgTempDiff) < 0){
+            return AvgTempDiff + "% decrease";
+        }
+        else{
+            return AvgTempDiff + "%";
+        }
+        
     }
     public String getLandOceanAvgDiff(String region, String YearMin, String YearMax){
         return YearMin;

@@ -141,4 +141,9 @@ td {
 }
  
 
- 
+.noData{
+  position: relative;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}

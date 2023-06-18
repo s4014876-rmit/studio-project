@@ -162,6 +162,13 @@ public class CommonElements {
                 """;
 	}
 
+	public static String tabContainer_sort(){
+		return """ 
+			<div class='Tabs_Container_Sort'>
+            <div class='tabs_sort'>
+                """;
+	}
+
 	//Create tab label
 	public static String tabLabel(String tabType, String checked){
 		String html = "";
@@ -174,6 +181,18 @@ public class CommonElements {
 		}
 		return html;
 			
+	}
+
+	public static String tabLabel_sort(String tabType, String checked){
+		String html = "";
+		if(checked == "checked"){
+			html = "<input type='radio' class='tabs_radio_sort' name='regions' id='" + tabType + "Tab'" + checked + "> <label for='" + tabType + "Tab' class='tabs_label_sort'>" + tabType +"</label><div class='tabs_content'>";
+		}
+		else 
+		{
+			html = "<input type='radio' class='tabs_radio_sort' name='regions' id='" + tabType + "Tab'> <label for='" + tabType + "Tab' class='tabs_label_sort'>" + tabType +"</label><div class='tabs_content_sort'>";
+		}
+		return html;
 	}
 
 	//create dropdownform open (for tabs)
@@ -196,6 +215,13 @@ public class CommonElements {
 	//dropdown button submit (for tabs)
 	public static String dropDownSubmit(String label){
 		return "<button type 'submit' class'btn'>" + label + "</button></form>";
+	}
+
+	public static String nodata(){
+		String html = "";
+		html = "<div class='noData'><p></div>";
+		return html;
+
 	}
 	
 }

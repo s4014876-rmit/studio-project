@@ -124,9 +124,9 @@ public class PageST2A implements Handler {
                         html = html + "<p>LandOceanAverage temp: " + PageIndex.getAvgTemp_World(WorldYearMin_drop) + " - " + PageIndex.getAvgTemp_World(WorldYearMax_drop);
                         html = html + "<p>Average land Ocean temp difference: " + getLandOceanAvgDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " degrees</p><br></br>";
 
-                        html = html + "<p>Population Year: " + WorldYearMin_drop + " = " + PageIndex.getPopulation_World(WorldYearMin_drop) + " people";
-                        html = html + "<p>Population Year: " + WorldYearMax_drop + " = " + PageIndex.getPopulation_World(WorldYearMax_drop) + " people";
-                        html = html + "<p>Population change: " + getPopulationDiff("World", WorldYearMin_drop, WorldYearMax_drop) + " people";
+                        html = html + "<p>Population Year: " + WorldYearMin_drop + " = " + PageIndex.getPopulation_World(WorldYearMin_drop) + "</p>";
+                        html = html + "<p>Population Year: " + WorldYearMax_drop + " = " + PageIndex.getPopulation_World(WorldYearMax_drop) + "</p>";
+                        html = html + "<p>Population change: " + getPopulationDiff("World", WorldYearMin_drop, WorldYearMax_drop) + "</p>";
                         
                         query = "Select * from global Where Year Between " + WorldYearMin_drop + " AND " + WorldYearMax_drop;
 

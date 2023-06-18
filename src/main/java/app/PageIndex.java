@@ -135,7 +135,6 @@ public class PageIndex implements Handler {
                             html = html + "<p>Population: " + getPopulation_World(WorldYear_drop);
                                     
                             html = html + """
-                                <p>This is where all the <i>World</i> data will go:)</p>
                             </div>
                         </div>
                     """;
@@ -191,8 +190,7 @@ public class PageIndex implements Handler {
                             html = html + "<p>AvgTemp: " + getAvgTemp_CountryYear(Country_drop, CountryYear_drop) + " degrees</p>";
                             html = html + "<p>Population: " + getpopulation_CountryYear(Country_drop, CountryYear_drop);
 
-                            html = html + """        
-                                <p>This is where all the <i>Country</i> data will go:)</p>
+                            html = html + """
                         </div>
                     </div>
                 """;   
@@ -253,7 +251,6 @@ public class PageIndex implements Handler {
                             html = html + "<p>AvgTemp: " + getAvgTemp_StateYear(State_drop, StateYear_drop) + " degrees</p>";
                             
                             html = html + """
-                                <p>This is where all the <i>State</i> data will go:)</p>
                         </div>
                     </div>
                     """;
